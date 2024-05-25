@@ -1,0 +1,28 @@
+/* components/TypingEffect.module.css */
+.typingContainer {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .typingEffect {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .cursor {
+    display: inline-block;
+    animation: blink 0.75s step-end infinite;
+    margin-left: 2px;
+  }
+  
+  @keyframes blink {
+    from, to {
+      border-color: transparent;
+    }
+    50% {
+      border-color: black;
+    }
+  }
+  

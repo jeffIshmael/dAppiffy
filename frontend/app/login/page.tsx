@@ -13,8 +13,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import Link from "next/link";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
+import { error } from "console";
 
-export const TabsDemo = () => {
+export const LoginPage = () => {
+  //open the wallets
+  const { open, close } = useWeb3Modal();
+
+  const handleLoginClick =  (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+    open();
+  };
   return (
     <div className="fixed inset-0 flex items-center justify-center mt-0 bg-gray-900 bg-opacity-40">
       <div className="flex flex-col">
@@ -41,7 +50,7 @@ export const TabsDemo = () => {
             </div>
           </CardContent>
           <CardFooter>
-            <Button>Login</Button>
+            <Button onClick={handleLoginClick }>Login</Button>
           </CardFooter>
         </Card>
       </div>
@@ -49,4 +58,4 @@ export const TabsDemo = () => {
   );
 };
 
-export default TabsDemo;
+export default LoginPage;
