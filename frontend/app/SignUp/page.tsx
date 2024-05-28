@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useWriteContract, useConnect, useDisconnect,useAccount } from "wagmi";
+import { useWriteContract, useConnect, useDisconnect, useAccount } from "wagmi";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { Toaster, toast } from "sonner";
@@ -11,59 +11,50 @@ import { AlertCircle, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export const SignUpForm = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
   const { writeContractAsync } = useWriteContract();
   const { open } = useWeb3Modal();
   const { disconnect } = useDisconnect();
   const router = useRouter();
-  const { connector: activeConnector, isConnected } = useAccount()
-  const { connect, connectors } = useConnect()
+  const { isConnected } = useAccount();
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
-    // console.log(data);
     const account = await open();
-   
-    if (isConnected) {
-    try {
-      const hash = await writeContractAsync({
-        abi: dAppifyABI,
-        address: "0x38dAC382f6b52bF90333d9956EbA7c4BD006Bb21",
-        functionName: "signUp",
-        args: [
-          data.firstname as string,
-          data.lastname as string,
-          data.username as string,
-        ],
-      });
-      if (hash) {
-        console.log(hash);
-        setSuccess("Account has been created. You can now log in.");
-      } else {
-        setError("An error occurred while creating your account.");
-      }
-    } catch (e) {
-      console.log(e);
-      toast.error("Failed to create event, try again.");
-      return;}
+    const ally = await toast("Account successfully connected");
 
-      //  (err: any) {
-      //   if (err.reason) {
-      //     setError(err.reason);
-      //   } else if (err.data && err.data.message) {
-      //     setError(err.data.message);
-      // }
-      // await hash;
-      disconnect();
-    }
-    else {
+    if (isConnected) {
+      try {
+        const hash = await writeContractAsync({
+          abi: dAppifyABI,
+          address: "0x03bD673B77C9f21F1F1C74c697D5c8E9e77EC432",
+          functionName: "signUp",
+          args: [
+            data.firstname as string,
+            data.lastname as string,
+            data.username as string,
+          ],
+        });
+        if (hash) {
+          console.log(hash);
+          setSuccess("Account has been created. You can now ");
+          setError("");
+          disconnect();
+        } else {
+          setError("An error occurred while creating your account.");
+        }
+      } catch (err: any) {
+        if (err.reason) {
+          setError(err.reason);
+        } else if (err.message) {
+          setError("Username already taken, please use another.");
+        }
+        console.log(error);
+      }
+    } else {
       console.log("please connect wallet");
     }
   }
@@ -143,20 +134,25 @@ export const SignUpForm = () => {
             </button>
           </div>
 
-          {error && (
+          {error ? (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Error</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
-          )}
-          {success && (
-            <Alert>
+          ) : null}
+          {success ? (
+            <Alert className="mt-2 bg-grey-400">
               <Terminal className="h-4 w-4" />
               <AlertTitle>Heads up!</AlertTitle>
-              <AlertDescription>{success}</AlertDescription>
+              <AlertDescription>
+                {success}
+                <span>
+                  <Link href={"/login"}>Log in.</Link>
+                </span>
+              </AlertDescription>
             </Alert>
-          )}
+          ) : null}
         </form>
       </div>
     </div>

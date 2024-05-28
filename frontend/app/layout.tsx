@@ -7,6 +7,7 @@ import { cookieToInitialState } from "wagmi";
 import { wagmiConfig } from "@/config";
 import Web3ModalProvider from "@/context";
 import { headers } from "next/headers";
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
             <div className="flex mr-0">
               <ModeToggle />
             </div>
+            <Toaster />
             {children}
           </ThemeProvider>
         </Web3ModalProvider>
