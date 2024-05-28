@@ -5,9 +5,10 @@ contract dAppify{
 
     uint totalusers;
     uint totalRegisteredDapps;
-    uint subscriptionPay = 1 ether;
+    uint subscriptionPay = 0.01 ether;
     address subscrptionAddress = address(this);
     address public owner;
+    uint totalDAOmem;
 
 
     constructor() {
@@ -31,6 +32,25 @@ contract dAppify{
         address myAddress;
     }
 
+    //struct of a member of the DAO
+    struct DAOMember{
+        uint userId;
+        string username;
+        address memberAddress;
+    }
+
+    //struct for proposed dApp
+    struct proposal {
+        uint dAppId;
+        string dAppName;
+        string description;
+        uint yesVotes;
+        uint noVotes;
+        uint totalvotes;
+        address regAddress;
+    }
+
+
     //struct of registered dApp
     struct dApp{
         uint dAppId;
@@ -51,11 +71,12 @@ contract dAppify{
     //mappimg address and user
     mapping(address => User) private userAddress;
 
-    //array of users
-    User[] private userArray;
+    //mapping index to DAO member
+    mapping (string => DAOMember) public DaoMem;
 
-    //array of dApp
-    dApp[] private dAppArray;
+
+    //event for a member joining the DAO
+    event succJoined(uint userId, string userName, address memberAddress);
 
     //event for registered user
     event userRegistered(uint userId, string firstName ,string secondName, string userName ,uint Downloads ,address myAddress);
@@ -73,6 +94,22 @@ contract dAppify{
         userAddress[_myAddress] = User(_userId,_firstName , _secondName, _userName,0, _myAddress);
         emit userRegistered(_userId,_firstName , _secondName, _userName, 0,_myAddress);
         }
+
+    //function to join the DAO
+    function joinDAO() public payable {
+        require(registered(msg.sender), "First signup to have an account");
+        string memory _userName = userAddress[msg.sender].userName;
+        uint _userId = userAddress[msg.sender].userId;
+        require(msg.value > 0, "Enter an amount");
+        (bool sent, ) = subscrptionAddress.call{value: msg.value}("");
+        if (sent){
+            DaoMem[_userName] = DAOMember(_userId, _userName , msg.sender);
+            emit succJoined(_userId, _userName, msg.sender);
+        } else {
+            return;
+        }
+        
+    }
 
     //function to get user
     function getUser(string memory _userName) public view returns(User memory){
@@ -145,6 +182,14 @@ contract dAppify{
             }
         }
     return false;}
+
+    //function to login
+    function login( string memory _userName) public view returns (bool) {
+        require(Exist(_userName),"username not found");
+        require(registered(msg.sender),"username not found");
+        require(ourUsers[_userName].myAddress == msg.sender , "Please use the address you used to create");
+        return true;
+    }
 
     //function to withdraw from the contract
     function withdraw() public payable onlyOwner {
