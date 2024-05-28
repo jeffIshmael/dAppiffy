@@ -24,9 +24,9 @@ export const Nav = () => {
 
       <div className="flex items-center space-x-6 mr-4">
         <div className=" flex mr-12">
-            <Button asChild variant="secondary">
-              <Link href="/Register-dApp">register dApp</Link>
-            </Button>
+          <Button asChild variant="secondary">
+            <Link href="/Register-dApp">register dApp</Link>
+          </Button>
         </div>
         <Button asChild variant="outline">
           <Link href="/login">Login</Link>
