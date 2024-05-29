@@ -9,6 +9,7 @@ contract dAppify{
     address subscrptionAddress = address(this);
     address public owner;
     uint totalDAOmem;
+    uint totalProposals;
 
 
     constructor() {
@@ -40,14 +41,16 @@ contract dAppify{
     }
 
     //struct for proposed dApp
-    struct proposal {
-        uint dAppId;
+    struct Proposal {
+        uint proposalId;
         string dAppName;
         string description;
         uint yesVotes;
         uint noVotes;
-        uint totalvotes;
-        address regAddress;
+        uint endtime;
+        mapping(address => bool) hasVoted;
+        address proposer;
+        bool isApproved;
     }
 
 
@@ -74,6 +77,21 @@ contract dAppify{
     //mapping index to DAO member
     mapping (string => DAOMember) public DaoMem;
 
+    //mapping proposal ID to proposal
+    mapping(uint => Proposal) public IdProposal;
+
+    //mapping of index of user struct
+    mapping (uint => DAOMember) private DAOmembers;
+
+    //event for making a proposal
+    event ProposalCreated(uint proposalId, string dAppName,string description,uint yesVotes,uint noVotes,uint totalvotes,
+        uint endtime,address proposer);
+
+    //event to show that one has voted
+    event Voted(address DAOmember, uint ProposalId);
+
+    //event to show a proposal has been approved
+    event ProposalApproved(uint proposalId);
 
     //event for a member joining the DAO
     event succJoined(uint userId, string userName, address memberAddress);
@@ -131,19 +149,45 @@ contract dAppify{
     }
 
     //function to register dApp
-    function registerDapp(string memory _dAppName, string memory _description) public payable {
-
-        address _dAppreg = msg.sender;
+    function proposeDapp(string memory _dAppName, string memory _description) public payable {
+        address _proposer= msg.sender;
         require(msg.value == subscriptionPay, "Enter the correct price");
         (bool sent, ) = subscrptionAddress.call{value: msg.value}("");
         if (sent){
-            uint _dAppId = totalRegisteredDapps++;
-            dAppsMap[_dAppId]= dApp(_dAppId,_dAppName, _description , _dAppreg);
-            emit dAppRegistered(_dAppId, _dAppName, _description, _dAppreg);
+            uint _proposalId = totalProposals++;
+            uint _endtime = block.timestamp + 24 hours;
+            Proposal storage newProposal = IdProposal[_proposalId ];
+            newProposal.proposalId = _proposalId;
+            newProposal.dAppName = _dAppName;
+            newProposal.description = _description;
+            newProposal.endtime = _endtime;
+            newProposal.proposer = _proposer;
+            emit ProposalCreated(_proposalId,_dAppName, _description,0,0,0,_endtime, _proposer);
         } else {
             return;
         }    
     }
+
+    //function to vote
+    function vote(uint _proposalId, bool _yes, bool _no) public onlyMember{
+        Proposal storage proposal = IdProposal[_proposalId];
+        require(!proposal.hasVoted[msg.sender], "Already voted on this proposal");
+        if (_yes) {
+            proposal.yesVotes++;
+        } else if (_no){
+            proposal.noVotes++;
+        }
+        proposal.hasVoted[msg.sender] = true;
+
+        emit Voted(msg.sender, _proposalId);
+
+        // Check if proposal is approved
+        if (proposal.yesVotes > totalDAOmem / 2) {
+            proposal.isApproved = true;
+            emit ProposalApproved(_proposalId);
+        }
+    }
+
 
     //function to get registered dApp
     function getdApp(uint _dAppId) public view returns (dApp memory) {
@@ -204,5 +248,20 @@ contract dAppify{
         require(msg.sender == owner, "Only the owner can call this function");
         _;
     }
+
+    //modifier for onlyMember
+    modifier onlyMember(){
+        require(member(msg.sender), "Only DAO members can perform this");
+        _;
+    }
+
+    //function to check if address is in the DAO
+    function member(address _myAdd) public view returns (bool) {
+        for (uint i=0; i < totalDAOmem; i++ ){
+            if(DAOmembers[i].memberAddress == _myAdd){
+                return true;
+            }
+        }
+    return false;}
 
 }

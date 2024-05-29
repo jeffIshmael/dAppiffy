@@ -30,7 +30,7 @@ export const SignUpForm = () => {
       try {
         const hash = await writeContractAsync({
           abi: dAppifyABI,
-          address: "0x03bD673B77C9f21F1F1C74c697D5c8E9e77EC432",
+          address: "0x2c3bCE9057B448ADb34F296da4CAf78366aDE581",
           functionName: "signUp",
           args: [
             data.firstname as string,
