@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import ConnectButton from "../(components)/Connect";
 import Link from "next/link";
 import { useWriteContract, useConnect, useDisconnect, useAccount } from "wagmi";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
@@ -9,6 +10,7 @@ import { Toaster, toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AlertCircle, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { DAPPIFYCONTRACT } from "../constants/constant";
 
 export const SignUpForm = () => {
   const [error, setError] = useState("");
@@ -17,7 +19,7 @@ export const SignUpForm = () => {
   const { open } = useWeb3Modal();
   const { disconnect } = useDisconnect();
   const router = useRouter();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -30,7 +32,7 @@ export const SignUpForm = () => {
       try {
         const hash = await writeContractAsync({
           abi: dAppifyABI,
-          address: "0x2c3bCE9057B448ADb34F296da4CAf78366aDE581",
+          address: DAPPIFYCONTRACT,
           functionName: "signUp",
           args: [
             data.firstname as string,
@@ -42,7 +44,7 @@ export const SignUpForm = () => {
           console.log(hash);
           setSuccess("Account has been created. You can now ");
           setError("");
-          disconnect();
+          // disconnect();
         } else {
           setError("An error occurred while creating your account.");
         }
@@ -60,7 +62,7 @@ export const SignUpForm = () => {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-40">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 ">
       <Link href={"/"} className="flex mr-12 ml-0">
         <Image
           src="/images/logo-no-background.png"

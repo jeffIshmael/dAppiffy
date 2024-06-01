@@ -1,15 +1,33 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Syne } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/Theme-provider";
-import { ModeToggle } from "./(components)/ModeChanger";
 import { cookieToInitialState } from "wagmi";
 import { wagmiConfig } from "@/config";
 import Web3ModalProvider from "@/context";
 import { headers } from "next/headers";
-import { Toaster } from 'sonner';
+import { Toaster } from "sonner";
+import { Inter as FontSans } from "next/font/google";
+
+import { cn } from "@/lib/utils";
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 const inter = Inter({ subsets: ["latin"] });
+const displayFont = Syne({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-space-display",
+});
+
+const baseFont = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-space-default",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,24 +39,28 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialState = cookieToInitialState( wagmiConfig , headers().get("cookie"));
+  const initialState = cookieToInitialState(
+    wagmiConfig,
+    headers().get("cookie")
+  );
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        <Web3ModalProvider initialState={initialState}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="flex mr-0">
-              <ModeToggle />
-            </div>
+      <body
+        className={`${baseFont.variable} ${displayFont.variable} scroll-smooth`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Web3ModalProvider initialState={initialState}>
+            <div className="flex mr-0"></div>
             <Toaster />
             {children}
-          </ThemeProvider>
-        </Web3ModalProvider>
+          </Web3ModalProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
