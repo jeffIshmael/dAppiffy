@@ -62,10 +62,6 @@ export const TypingEffect = () => {
           <Link href="/Explore-dApps">Explore dApps</Link>
         </Button>
       </div>
-      {/* <button onClick={() => open()}>Open Connect Modal</button>
-      <button onClick={() => open({ view: "Networks" })}>
-        Open Network Modal
-      </button> */}
     </div>
   );
 };

@@ -63,16 +63,16 @@ contract dAppify{
     }
 
     //mapping of dApps
-    mapping(uint => dApp) dAppsMap;
+    mapping(uint => dApp) public dAppsMap;
 
     //mapping of username to User struct
-    mapping (string => User) private ourUsers;
+    mapping (string => User) public ourUsers;
 
     //mapping of index of user struct
-    mapping (uint => User) private users;
+    mapping (uint => User) public users;
 
     //mappimg address and user
-    mapping(address => User) private userAddress;
+    mapping(address => User) public userAddress;
 
     //mapping index to DAO member
     mapping (string => DAOMember) public DaoMem;
@@ -106,10 +106,11 @@ contract dAppify{
     function signUp(string memory _firstName, string memory _secondName, string memory _userName) public {
         require(!Exist(_userName), "username already taken");
         address _myAddress = msg.sender;
-        uint _userId = totalusers++;
+        uint _userId = totalusers;
         ourUsers[_userName]= User(_userId,_firstName , _secondName, _userName,0, _myAddress);
         users[_userId] = User(_userId,_firstName , _secondName, _userName,0, _myAddress);
         userAddress[_myAddress] = User(_userId,_firstName , _secondName, _userName,0, _myAddress);
+        totalusers++;
         emit userRegistered(_userId,_firstName , _secondName, _userName, 0,_myAddress);
         }
 
@@ -204,7 +205,7 @@ contract dAppify{
     }
 
     //function to check if username exist
-    function Exist(string memory _userName) private view returns (bool) {
+    function Exist(string memory _userName) public view returns (bool) {
         for(uint i = 0; i < totalusers; i++) {
         if(keccak256(bytes(users[i].userName)) == keccak256(bytes(_userName))){
             return true;
@@ -228,10 +229,10 @@ contract dAppify{
     return false;}
 
     //function to login
-    function login( string memory _userName) public view returns (bool) {
+    function login( string memory _userName,address _user) public view returns (bool) {
         require(Exist(_userName),"username not found");
-        require(registered(msg.sender),"username not found");
-        require(ourUsers[_userName].myAddress == msg.sender , "Please use the address you used to create");
+        require(registered(_user),"Please sign up first");
+        require(ourUsers[_userName].myAddress == _user , "Please use the address you used to create");
         return true;
     }
 

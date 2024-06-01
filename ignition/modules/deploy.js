@@ -11,6 +11,9 @@ async function main() {
   const deployeddApp = await dappify.deploy();
   await deployeddApp.waitForDeployment();
   console.log("dAppify deployed to:", await deployeddApp.getAddress());
+
+  // function add inital data
+  
 }
 
 //handle errors from main()

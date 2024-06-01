@@ -17,35 +17,58 @@ import { useWeb3Modal } from "@web3modal/wagmi/react";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
 import { Toaster, toast } from "sonner";
 import { useReadContract, useAccount } from "wagmi";
-import React, { useState } from 'react';
-// import useLogin from '../(components)/LoginHook';
+import React, { useState } from "react";
+import ConnectButton from "../(components)/Connect";
+import { DAPPIFYCONTRACT } from "../constants/constant";
+import { useRouter } from "next/navigation";
 
 export const LoginPage = () => {
   const { open, close } = useWeb3Modal();
-  const { isConnected } = useAccount();
-  const [username, setUsername] = useState('');
+  const { isConnected, address } = useAccount();
+  const [ loggedin, setLoggedin ] = useState(false)
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const {
+    data: readdata,
+    error,
+    isSuccess,
+    isFetched,
+    refetch,
+  } = useReadContract({
+    abi: dAppifyABI,
+    address: DAPPIFYCONTRACT,
+    functionName: "login",
+    args: [username as string, address],
+  });
 
-  // const { login, result, error } = useLogin(username);
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = Object.fromEntries(formData.entries());
+    setUsername(data.username as string);
 
-  // async function submit(e: React.FormEvent<HTMLFormElement>) {
-  //   e.preventDefault();
-  //   const formData = new FormData(e.target as HTMLFormElement);
-  //   const data = Object.fromEntries(formData.entries());
-  //   setUsername(data.username as string);
-
-  //   const account = await open();
-  //   await login(); // Call the login function from the custom hook
-  //     if (result) {
-  //       console.log(result);
-  //       // Handle success
-  //     } else if (error) {
-  //       console.error(error);
-  //       // Handle error
-  //     }
-    
-  // }
+    if (!isConnected) {
+      await open();
+      console.log("wallet not connected");
+    }
+    if (address) {
+      const result = await refetch();
+      if (isSuccess) {
+        console.log(address);
+        console.log("Read new data", result.data);
+        if ((result.data === true)) {
+          setLoggedin(true);
+          router.push('/');  
+        }
+      } else {
+        console.log(error);
+      }
+    } else {
+      console.log("cant get addresss");
+    }
+  }
   return (
-    <div className="fixed inset-0 flex items-center justify-center mt-0 bg-gray-900 bg-opacity-40">
+    <div className="fixed inset-0 flex items-center justify-center mt-0 bg-gray-900">
       <div className="flex flex-col">
         <Link href={"/"} className="flex items-center mb-8 ml-14">
           <Image
@@ -55,7 +78,7 @@ export const LoginPage = () => {
             height={150}
           />
         </Link>
-        <form >
+        <form onSubmit={submit}>
           <Card>
             <CardHeader>
               <CardTitle>Login</CardTitle>
@@ -77,7 +100,7 @@ export const LoginPage = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit">Login</Button>
+              <Button type="submit" className="bg-blue-700">Login</Button>
             </CardFooter>
           </Card>
         </form>
