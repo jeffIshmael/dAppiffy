@@ -35,13 +35,13 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/app/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated , username} = useAuth();
   const router = useRouter();
-  const [userName, setUserName] = useState("");
+  // const [userName, setUserName] = useState("");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -49,17 +49,17 @@ const Navbar: React.FC = () => {
   }, []);
 
   if (!mounted) return null;
+  console.log(isAuthenticated);
 
   return (
     <nav className="flex justify-between">
       <Link href={"/"}>
-        <div className="flex logo ml-5 rounded-md">
+        <div className="flex logo ml-5 rounded-md mt-3 mb-2">
           <Image
-            src="/images/logo-color-crop.png"
+            src="/static/images/logo-no-background.png"
             width={200}
             height={50}
             alt="Logo"
-            className="rounded-lg mt-4"
           />
         </div>
       </Link>
@@ -75,29 +75,22 @@ const Navbar: React.FC = () => {
             <Link href="/Register-dApp">register dApp</Link>
           </Button>
         </div>
-        {!isAuthenticated ? (
+        {isAuthenticated ? (
           <>
-            <Button asChild variant="outline">
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href="/SignUp">Sign Up</Link>
-            </Button>
-          </>
-        ) : (
-          <>
-            <div>
+            <div className="w-100 bg-gray-300 rounded-md p-1 ">
               <DropdownMenu>
-                <DropdownMenuTrigger asChild className="ho:c-pointer">
-                  <div className="flex justify-between items-center space-x-3 bg-gray-700 rounded-md p-1 hover:cursor-pointer">
+                <DropdownMenuTrigger
+                  asChild
+                  className="ho:c-pointer"
+                >
+                  <div className="flex justify-between items-center space-x-1 hover:cursor-pointer">
                     <Avatar>
-                      <AvatarImage src="/images/avatar.avif" />
+                      <AvatarImage src="/static/images/avatar.png" />
                       <AvatarFallback>DP</AvatarFallback>
                     </Avatar>
-                    <h1>{userName}</h1>
+                    <h1 className="text-black">{username}</h1>
                   </div>
                 </DropdownMenuTrigger>
-
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -165,7 +158,18 @@ const Navbar: React.FC = () => {
               </DropdownMenu>
             </div>
           </>
+        ) : (
+          <>
+            <Button asChild variant="outline">
+              <Link href="/login">Login</Link>
+            </Button>
+            <Button asChild variant="secondary">
+              <Link href="/SignUp">Sign Up</Link>
+            </Button>
+          </>
         )}
+
+        <div />
       </div>
     </nav>
   );

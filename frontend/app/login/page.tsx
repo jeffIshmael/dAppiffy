@@ -21,13 +21,16 @@ import React, { useState } from "react";
 import ConnectButton from "../(components)/Connect";
 import { DAPPIFYCONTRACT } from "../constants/constant";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { set } from "react-hook-form";
 
 export const LoginPage = () => {
   const { open, close } = useWeb3Modal();
   const { isConnected, address } = useAccount();
-  const [ loggedin, setLoggedin ] = useState(false)
+  const auth = useAuth();
   const router = useRouter();
   const [username, setUsername] = useState("");
+
   const {
     data: readdata,
     error,
@@ -45,7 +48,7 @@ export const LoginPage = () => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
-    setUsername(data.username as string);
+    const user = setUsername(data.username as string);
 
     if (!isConnected) {
       await open();
@@ -56,9 +59,10 @@ export const LoginPage = () => {
       if (isSuccess) {
         console.log(address);
         console.log("Read new data", result.data);
-        if ((result.data === true)) {
-          setLoggedin(true);
-          router.push('/');  
+        if (result.data === true) {
+          auth.isAuthenticated = true;
+          auth.username = "user";
+          router.push("/");
         }
       } else {
         console.log(error);
@@ -67,12 +71,13 @@ export const LoginPage = () => {
       console.log("cant get addresss");
     }
   }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center mt-0 bg-gray-900">
       <div className="flex flex-col">
         <Link href={"/"} className="flex items-center mb-8 ml-14">
           <Image
-            src="/images/logo-no-background.png"
+            src="/static/images/logo-no-background.png"
             alt="Logo"
             width={250}
             height={150}
@@ -100,7 +105,9 @@ export const LoginPage = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="bg-blue-700">Login</Button>
+              <Button type="submit" className="bg-blue-700">
+                Login
+              </Button>
             </CardFooter>
           </Card>
         </form>
