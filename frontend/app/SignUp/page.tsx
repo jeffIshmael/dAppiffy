@@ -26,9 +26,10 @@ export const SignUpForm = () => {
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
     const account = await open();
-    const ally = await toast("Account successfully connected");
+    
 
     if (isConnected) {
+      const ally = await toast("Account successfully connected");
       try {
         const hash = await writeContractAsync({
           abi: dAppifyABI,
@@ -65,7 +66,7 @@ export const SignUpForm = () => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 ">
       <Link href={"/"} className="flex mr-12 ml-0">
         <Image
-          src="/images/logo-no-background.png"
+          src="/static/images/logo-no-background.png"
           alt="Logo"
           width={400}
           height={200}

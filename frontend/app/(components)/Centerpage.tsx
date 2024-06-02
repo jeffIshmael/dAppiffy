@@ -10,7 +10,7 @@ import { LandingTestimonialReadMoreWrapper } from "@/components/landing/testimon
 import { LandingFaqSection } from '@/components/landing/LandingFaq';
 
 
-export default function Component() {
+export default function LandPage() {
   const avatarItems = [
     {
       imageSrc: "https://picsum.photos/id/64/100/100",
