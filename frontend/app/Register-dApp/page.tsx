@@ -62,15 +62,17 @@ export const RegisterdApp = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <div className="w-full max-w-xl bg-gray-700 rounded-lg p-8 shadow-lg mt-2">
+    <div className="flex items-center flex-col justify-center min-h-screen bg-gray-900">
+      <div className="mt-2">
         <Link href={"/"}>
           <div className="bg-gray-300 rounded-lg ">
-            <h1 className="text-2xl font-bold mb-6 text-center  text-black">
+            <h1 className="text-2xl font-bold mb-6 text-center p-4 text-black">
               dApp Registration Form
             </h1>
           </div>
         </Link>
+      </div>
+      <div className=" flex w-full max-w-xl bg-gray-700 rounded-lg p-8 shadow-lg ">
         <Formik
           initialValues={{
             dAppName: "",
