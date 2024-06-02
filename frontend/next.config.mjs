@@ -11,7 +11,6 @@ const nextConfig = {
           hostname: 'picsum.photos',
         },
       ],
-      
     },
   }
 
