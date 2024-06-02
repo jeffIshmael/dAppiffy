@@ -9,6 +9,7 @@ import { LandingTestimonialGrid } from "@/components/landing/testimonial/Landing
 import { LandingTestimonialReadMoreWrapper } from "@/components/landing/testimonial/LandingTestimonialReadMoreWrapper";
 import { LandingFaqSection } from '@/components/landing/LandingFaq';
 
+
 export default function Component() {
   const avatarItems = [
     {
@@ -84,11 +85,11 @@ export default function Component() {
   return (
     <div>
       <LandingPrimaryVideoCtaSection
-        title="Transform Your Business Today"
-        description="Say goodbye to inefficiencies and hello to success with our groundbreaking AI app. Streamline your workflow, boost productivity, and maximize revenue effortlessly."
+        title="Discover the Best Web 3.0 Applications in One Place"
+        description="Explore, download, and enjoy a curated selection of decentralized applications with ease"
         autoPlay
         controls={false}
-        videoSrc="https://cache.shipixen.com/features/11-pricing-page-builder.mp4"
+        
         withBackground
         withBackgroundGlow
         variant="secondary"
@@ -96,10 +97,10 @@ export default function Component() {
         leadingComponent={<LandingProductHuntAward />}
       >
         <Button size="xl" variant="secondary" asChild>
-          <a href="#">Buy Now</a>
+          <a href="#">Explore events</a>
         </Button>
         <Button size="xl" variant="outlineSecondary">
-          <a href="#">Learn More</a>
+          <a href="#">Join dao</a>
         </Button>
         <LandingDiscount
           discountValueText="$350 off"
@@ -115,37 +116,42 @@ export default function Component() {
       </LandingPrimaryVideoCtaSection>
       <div>
         <LandingProductFeature
-          title="Supercharge Your Efficiency!"
+          title="Unlock the Ultimate Web 3.0 Experience!"
           descriptionComponent={
             <>
               <LandingProductFeatureKeyPoints
                 keyPoints={[
                   {
-                    title: "Intelligent Assistance",
+                    title: "Vast Library of dApps",
                     description:
-                      "Receive personalized recommendations and insights tailored to your workflow.",
+                      "Access a comprehensive and curated selection of the best Web 3.0 applications.",
                   },
                   {
-                    title: "Seamless Collaboration",
+                    title: "Easy Navigation",
                     description:
-                      "Easily collaborate with team members and clients in real-time.",
+                      "User-friendly interface to explore and discover new dApps effortlessly.",
                   },
                   {
-                    title: "Advanced Customization",
+                    title: "Secure Downloads",
                     description:
-                      "Tailor your app to fit your unique requirements with extensive customization options.",
+                      " Ensure safety and security with vetted and trusted applications.",
                   },
+                  {
+                    title: "User Reviews and Ratings",
+                    description:
+                      " Make informed decisions with insights from the community.",
+                      },
                 ]}
               />
               <Button className="mt-8" asChild>
                 <a href="#">Try now for free</a>
               </Button>
               <p className="text-sm">
-                7 day free trial, no credit card required.
+                free trial, no credit card required.
               </p>
             </>
           }
-          imageSrc="/static/images/backdrop-19.webp"
+          imageSrc="/images/image2.jpg"
           imageAlt="Screenshot of the product"
           imagePosition="left"
           imagePerspective="bottom"
