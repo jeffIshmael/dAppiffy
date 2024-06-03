@@ -1,14 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
@@ -18,11 +11,11 @@ import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
 import { Toaster, toast } from "sonner";
 import { useReadContract, useAccount } from "wagmi";
 import React, { useState } from "react";
-import ConnectButton from "../(components)/Connect";
+
 import { DAPPIFYCONTRACT } from "../constants/constant";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { set } from "react-hook-form";
+
 
 export const LoginPage = () => {
   const { open, close } = useWeb3Modal();
@@ -35,6 +28,7 @@ export const LoginPage = () => {
     data: readdata,
     error,
     isSuccess,
+    isRefetching,
     isFetched,
     refetch,
   } = useReadContract({
@@ -73,43 +67,42 @@ export const LoginPage = () => {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center mt-0 bg-gray-900">
-      <div className="flex flex-col">
-        <Link href={"/"} className="flex items-center mb-8 ml-14">
-          <Image
-            src="/static/images/logo-no-background.png"
-            alt="Logo"
-            width={250}
-            height={150}
-          />
-        </Link>
-        <form onSubmit={submit}>
-          <Card>
-            <CardHeader>
-              <CardTitle>Login</CardTitle>
-              <CardDescription>
-                Please use the same username and address you used to create.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="name">Username</Label>
-                <Input
-                  id="username"
-                  type="text"
-                  // value={firstName}
-                  // onChange={(e) => setUserName(e.target.value)}
-                  name="username"
-                  required
-                />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button type="submit" className="bg-blue-700">
-                Login
-              </Button>
-            </CardFooter>
-          </Card>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
+      <div className="flex flex-col max-w-md space-y-6 p-6 bg-white rounded-lg shadow-md">
+        <div>
+          <Link href={"/"}>
+            <Image
+              src="/static/images/logo-color-crop.png"
+              alt="Logo"
+              width={300}
+              height={150}
+            />
+          </Link>
+        </div>
+        <form className="space-y-4" onSubmit={submit}>
+          <div>
+            <h2 className="text-2xl font-md font-sans text-black">Username</h2>
+            <Label htmlFor="username" className="text-black">
+              <p className="text-gray-800 mb-2">
+                Please, use the username you used to sign in
+              </p>
+            </Label>
+            <Input
+              id="username"
+              type="text"
+              name="username"
+              required
+              className="border-gray-300 text-white"
+            />
+          </div>
+
+          <Button
+            type="submit"
+            className="bg-blue-700 w-full text-white hover:bg-blue-600"
+            disabled={isRefetching}
+          >
+            {isRefetching ? "..." : "Login"}
+          </Button>
         </form>
       </div>
     </div>
