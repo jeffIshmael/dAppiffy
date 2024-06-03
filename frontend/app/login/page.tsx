@@ -29,7 +29,7 @@ export const LoginPage = () => {
   const { isConnected, address } = useAccount();
   const auth = useAuth();
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [userName, setUsername] = useState("user");
 
   const {
     data: readdata,
@@ -41,7 +41,7 @@ export const LoginPage = () => {
     abi: dAppifyABI,
     address: DAPPIFYCONTRACT,
     functionName: "login",
-    args: [username as string, address],
+    args: [userName as string, address],
   });
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
@@ -61,7 +61,7 @@ export const LoginPage = () => {
         console.log("Read new data", result.data);
         if (result.data === true) {
           auth.isAuthenticated = true;
-          auth.username = "user";
+          auth.username = userName;
           router.push("/");
         }
       } else {
