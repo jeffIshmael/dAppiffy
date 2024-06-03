@@ -98,18 +98,20 @@ export default function LandPage() {
         leadingComponent={<LandingProductHuntAward />}
       >
         <Link href={"/ExploreDapps"}>
-          <Button size="xl" variant="secondary" asChild>
+          <Button size="xl" variant="secondary">
             Explore dApps
           </Button>
         </Link>
+
         <Link href={"/dAppify-DAO"}>
           <Button size="xl" variant="outlineSecondary">
             dAppify-DAO
           </Button>
         </Link>
+
         <LandingDiscount
-          discountValueText="$350 off"
-          discountDescriptionText="for the first 10 customers (2 left)"
+          discountValueText="30% off"
+          discountDescriptionText="for the first 10 to register dApps (2 left)"
         />
         <LandingSocialProof
           className="w-full mt-12"
@@ -148,18 +150,19 @@ export default function LandPage() {
                       },
                 ]}
               />
-              <Button className="mt-8" asChild>
-                <a href="#">Try now for free</a>
+              <Button className="mt-8">
+                <Link href="/">Try now for free</Link>
               </Button>
               <p className="text-sm">
                 free trial, no credit card required.
               </p>
             </>
           }
-          imageSrc="/images/image2.jpg"
-          imageAlt="Screenshot of the product"
+          imageSrc="/static/images/image2.jpg"
+          imageAlt="display photo"
           imagePosition="left"
           imagePerspective="bottom"
+          
         />
       </div>
       <LandingTestimonialReadMoreWrapper size="md">

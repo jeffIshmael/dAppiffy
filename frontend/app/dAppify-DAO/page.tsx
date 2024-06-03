@@ -32,13 +32,13 @@ export const DAppifyDAO = () => {
           setErr("");
           // disconnect();
         } else {
-          setErr("An error occurred while creating your account.");
+          setErr("An error occurred while joining the DAO.");
         }
       } catch (err: any) {
         if (err.reason) {
           console.log(err.reason);
         } else if (err.message) {
-          console.log("Username already taken, please use another.");
+          console.log(err.reason);
         }
         console.log(error);
       }
@@ -116,7 +116,7 @@ export const DAppifyDAO = () => {
           </li>
           <li>
             Active Participation: You commit to actively participating in the
-            DAO's activities, including voting on proposals and contributing to
+            DAO&apos;s activities, including voting on proposals and contributing to
             discussions and reviews.
           </li>
           <li>
@@ -154,7 +154,7 @@ export const DAppifyDAO = () => {
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
           <p className="text-gray-600">
-            By clicking "Agree," you acknowledge that you have read, understood,
+            By clicking &quot;Agree,&quot; you acknowledge that you have read, understood,
             and agree to the terms and conditions outlined above. Your journey
             towards building and safeguarding the future of decentralized
             applications begins here.

@@ -56,7 +56,6 @@ const Navbar: React.FC = () => {
     disconnect();
     auth.isAuthenticated = false;
     auth.username = "";
-    
   }
 
   return (
@@ -72,14 +71,37 @@ const Navbar: React.FC = () => {
         </div>
       </Link>
       <div className="flex items-center space-x-16">
-        <Link href={"/"}> Home </Link>
-        <Link href={"/ExploreDapps"}> Explore </Link>
-        <Link href={"/"}> Updates </Link>
-        <Link href={"/"}> Proposed dApps </Link>
+        <Link
+          href={"/"}
+          className="transition-all duration-300 ease-in-out hover:text-blue-400 hover:scale-105"
+        >
+          Home
+        </Link>
+        <Link
+          href={"/ExploreDapps"}
+          className="transition-all duration-300 ease-in-out hover:text-blue-400 hover:scale-105"
+        >
+          Explore
+        </Link>
+        <Link
+          href={"/"}
+          className="transition-all duration-300 ease-in-out hover:text-blue-400 hover:scale-105"
+        >
+          Updates
+        </Link>
+        <Link
+          href={"/"}
+          className="transition-all duration-300 ease-in-out hover:text-blue-400 hover:scale-105"
+        >
+          Proposed dApps
+        </Link>
       </div>
       <div className="flex items-center space-x-6 mr-4">
         <div className=" flex mr-12">
-          <Button asChild variant="secondary">
+          <Button
+            variant="secondary"
+            className="bg-gradient-to-r from-gray-600 to-gray-500 hover:bg-gradient-to-r hover:from-gray-400 hover:to-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+          >
             <Link href="/Register-dApp">Register dApp</Link>
           </Button>
         </div>
@@ -167,10 +189,10 @@ const Navbar: React.FC = () => {
           </>
         ) : (
           <>
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className="hover:border-blue-900">
               <Link href="/login">Login</Link>
             </Button>
-            <Button asChild variant="secondary">
+            <Button asChild className="bg-white text-black hover:bg-slate-300 ">
               <Link href="/SignUp">Sign Up</Link>
             </Button>
           </>
