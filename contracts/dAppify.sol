@@ -5,8 +5,7 @@ contract dAppify{
 
     uint totalusers;
     uint totalRegisteredDapps;
-    uint subscriptionPay = 0.01 ether;
-    address subscrptionAddress = address(this);
+    uint subscriptionPay = 260000000000000;
     address public owner;
     uint totalDAOmem;
     uint totalProposals;
@@ -45,6 +44,14 @@ contract dAppify{
         uint proposalId;
         string dAppName;
         string description;
+        string category;
+        string chain;
+        string url;
+        string sourceCode;
+        string demolink;
+        string telegram;
+        string discord;
+        string email;
         uint yesVotes;
         uint noVotes;
         uint endtime;
@@ -58,8 +65,30 @@ contract dAppify{
     struct dApp{
         uint dAppId;
         string dAppName;
+        string category;
+        string chain;
         string description;
+        string url;
+        string sourceCode;
+        string demolink;
         address dAppreg;
+        string telegram;
+        string discord;
+        string email;
+    }
+
+    //struct params to simplify functions
+    struct Params{
+        string dAppName;
+        string category;
+        string chain;
+        string description;
+        string url;
+        string sourceCode;
+        string demolink;
+        string telegram;
+        string discord;
+        string email;
     }
 
     //mapping of dApps
@@ -81,10 +110,20 @@ contract dAppify{
     mapping(uint => Proposal) public IdProposal;
 
     //mapping of index of user struct
-    mapping (uint => DAOMember) private DAOmembers;
+    mapping (uint => DAOMember) public DAOmembers;
+
+    dApp[] public dAppsList;
 
     //event for making a proposal
-    event ProposalCreated(uint proposalId, string dAppName,string description,uint yesVotes,uint noVotes,uint totalvotes,
+    event ProposalCreated(uint proposalId, string dAppName,
+        string category,string chain,
+        string description,
+        string url,
+        string sourceCode,
+        string demolink,
+        string telegram,
+        string discord,
+        string email,uint yesVotes,uint noVotes,uint totalvotes,
         uint endtime,address proposer);
 
     //event to show that one has voted
@@ -100,11 +139,20 @@ contract dAppify{
     event userRegistered(uint userId, string firstName ,string secondName, string userName ,uint Downloads ,address myAddress);
 
     //event for registered Dapp
-    event dAppRegistered(uint dAppId, string dAppName, string description,address dAppreg);
+    event dAppRegistered(uint dAppId, string dAppName, string category,string chain,
+        string description,
+        string url,
+        string sourceCode,
+        string demolink,
+        address dAppreg,
+        string telegram,
+        string discord,
+        string email);
 
     //function to register user
     function signUp(string memory _firstName, string memory _secondName, string memory _userName) public {
         require(!Exist(_userName), "username already taken");
+        require(!registered(msg.sender),"the address is already registered");
         address _myAddress = msg.sender;
         uint _userId = totalusers;
         ourUsers[_userName]= User(_userId,_firstName , _secondName, _userName,0, _myAddress);
@@ -120,7 +168,7 @@ contract dAppify{
         string memory _userName = userAddress[msg.sender].userName;
         uint _userId = userAddress[msg.sender].userId;
         require(msg.value > 0, "Enter an amount");
-        (bool sent, ) = subscrptionAddress.call{value: msg.value}("");
+        (bool sent, ) = address(this).call{value: msg.value}("");
         if (sent){
             DaoMem[_userName] = DAOMember(_userId, _userName , msg.sender);
             emit succJoined(_userId, _userName, msg.sender);
@@ -150,20 +198,75 @@ contract dAppify{
     }
 
     //function to register dApp
-    function proposeDapp(string memory _dAppName, string memory _description) public payable {
-        address _proposer= msg.sender;
+    function proposeDapp(Params memory params) public payable {
         require(msg.value == subscriptionPay, "Enter the correct price");
-        (bool sent, ) = subscrptionAddress.call{value: msg.value}("");
+        (bool sent, ) = address(this).call{value: msg.value}("");
         if (sent){
             uint _proposalId = totalProposals++;
             uint _endtime = block.timestamp + 24 hours;
             Proposal storage newProposal = IdProposal[_proposalId ];
             newProposal.proposalId = _proposalId;
-            newProposal.dAppName = _dAppName;
-            newProposal.description = _description;
+            newProposal.dAppName = params.dAppName;
+            newProposal.category = params.category;
+            newProposal.chain = params.chain;
+            newProposal.description = params.description;
+            newProposal.url = params.url;
+            newProposal.sourceCode = params.sourceCode;
+            newProposal.demolink = params.demolink;
+            newProposal.telegram = params.telegram;
+            newProposal.discord = params.discord;
+            newProposal.email = params.email;
             newProposal.endtime = _endtime;
-            newProposal.proposer = _proposer;
-            emit ProposalCreated(_proposalId,_dAppName, _description,0,0,0,_endtime, _proposer);
+            newProposal.proposer = msg.sender;
+
+
+            emit ProposalCreated(_proposalId, params.dAppName,
+            params.category,
+            params.chain,
+            params.description,
+            params.url,
+            params.sourceCode,
+            params.demolink,
+            params.telegram,
+            params.discord,
+            params.email,0,0,0,_endtime,msg.sender);
+        } else {
+            return;
+        }    
+    }
+
+    //function to register dApp
+    function registerDapp(Params memory params) public payable {
+        require(msg.value == subscriptionPay, "Enter the correct price");
+        (bool sent, ) = address(this).call{value: msg.value}("");
+        if (sent){
+            uint _dAppId = totalRegisteredDapps;
+            dApp storage newdApp = dAppsMap[_dAppId];
+            newdApp.dAppId = _dAppId;
+            newdApp.dAppName = params.dAppName;
+            newdApp.category = params.category;
+            newdApp.chain = params.chain;
+            newdApp.description = params.description;
+            newdApp.url = params.url;
+            newdApp.sourceCode = params.sourceCode;
+            newdApp.demolink = params.demolink;
+            newdApp.dAppreg = msg.sender;
+            newdApp.telegram = params.telegram;
+            newdApp.discord = params.discord;
+            newdApp.email = params.email;
+            
+            dAppsList.push(newdApp);
+            emit dAppRegistered(_dAppId, params.dAppName,
+            params.category,
+            params.chain,
+            params.description,
+            params.url,
+            params.sourceCode,
+            params.demolink,
+            msg.sender,
+            params.telegram,
+            params.discord,
+            params.email);
         } else {
             return;
         }    
@@ -196,12 +299,8 @@ contract dAppify{
     }
 
     //function to get all dApps
-    function getAllDapps() public view returns (dApp[] memory){
-        dApp[] memory dappList = new dApp[](totalRegisteredDapps);
-        for (uint i = 0; i < totalRegisteredDapps; i++) {
-            dappList[i] = dAppsMap[i];
-        }
-    return dappList;
+    function getAllDapps() public view returns (dApp[] memory) {
+        return dAppsList;
     }
 
     //function to check if username exist

@@ -37,11 +37,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { useDisconnect } from "wagmi";
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated , username} = useAuth();
+  const auth = useAuth();
   const router = useRouter();
-  // const [userName, setUserName] = useState("");
+  const { disconnect } = useDisconnect();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -49,7 +50,14 @@ const Navbar: React.FC = () => {
   }, []);
 
   if (!mounted) return null;
-  console.log(isAuthenticated);
+  console.log(auth.isAuthenticated);
+
+  function logOut() {
+    disconnect();
+    auth.isAuthenticated = false;
+    auth.username = "";
+    
+  }
 
   return (
     <nav className="flex justify-between">
@@ -65,30 +73,27 @@ const Navbar: React.FC = () => {
       </Link>
       <div className="flex items-center space-x-16">
         <Link href={"/"}> Home </Link>
-        <Link href={"/"}> Explore </Link>
+        <Link href={"/ExploreDapps"}> Explore </Link>
         <Link href={"/"}> Updates </Link>
         <Link href={"/"}> Proposed dApps </Link>
       </div>
       <div className="flex items-center space-x-6 mr-4">
         <div className=" flex mr-12">
           <Button asChild variant="secondary">
-            <Link href="/Register-dApp">register dApp</Link>
+            <Link href="/Register-dApp">Register dApp</Link>
           </Button>
         </div>
-        {isAuthenticated ? (
+        {auth.isAuthenticated ? (
           <>
             <div className="w-100 bg-gray-300 rounded-md p-1 ">
               <DropdownMenu>
-                <DropdownMenuTrigger
-                  asChild
-                  className="ho:c-pointer"
-                >
+                <DropdownMenuTrigger asChild className="ho:c-pointer">
                   <div className="flex justify-between items-center space-x-1 hover:cursor-pointer">
                     <Avatar>
                       <AvatarImage src="/static/images/avatar.png" />
                       <AvatarFallback>DP</AvatarFallback>
                     </Avatar>
-                    <h1 className="text-black">{username}</h1>
+                    <h1 className="text-black">{auth.username}</h1>
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
@@ -149,11 +154,13 @@ const Navbar: React.FC = () => {
                     <span>API</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                  </DropdownMenuItem>
+                  <Button variant="ghost" onClick={logOut}>
+                    <DropdownMenuItem>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </Button>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

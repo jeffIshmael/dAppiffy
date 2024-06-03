@@ -3,17 +3,14 @@
 import { useAccount, useWriteContract } from "wagmi";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
 import { useRouter } from "next/navigation";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DAPPIFYCONTRACT } from "../constants/constant";
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
+import { ethers } from "ethers";
+import { strict } from "assert";
 
 export const RegisterdApp = () => {
   const { address, isConnected } = useAccount();
@@ -26,6 +23,7 @@ export const RegisterdApp = () => {
     category: Yup.string().required("Required"),
     chain: Yup.string().required("Required"),
     description: Yup.string().required("Required"),
+    websiteUrl: Yup.string().url("Invalid URL").required("Required"),
     sourceCode: Yup.string().url("Invalid URL").required("Required"),
     videoDemo: Yup.string().url("Invalid URL").required("Required"),
     telegram: Yup.string().url("Invalid URL").required("Required"),
@@ -37,22 +35,38 @@ export const RegisterdApp = () => {
     e.preventDefault();
     if (!isConnected) {
       toast.error("Please login to your account");
+      console.log("Please login to your account");
       return;
     }
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
     console.log(data);
+    const params = {
+      dAppName: data.dAppName as string,
+      category: data.category as string,
+      chain: data.chain as string,
+      description: data.description as string,
+      url: data.websiteUrl as string,
+      sourceCode: data.sourceCode as string,
+      demolink: data.videoDemo as string,
+      dAppreg: address,
+      telegram: data.telegram as string,
+      discord: data.discord as string,
+      email: data.email as string,
+    };
+
     try {
       const hash = await writeContractAsync({
         address: DAPPIFYCONTRACT,
         abi: dAppifyABI,
         functionName: "proposeDapp",
-        args: [data.name as string, data.description as string],
+        args: [params],
+        value: ethers.parseUnits("260000000000000", "wei"),
       });
       if (hash) {
         console.log(hash);
-        toast("Proposal has been successfully made");
-        router.push("/ProposeddApps");
+        toast("dApp has been registered successfully");
+        router.push("/ExploredApps");
       }
     } catch (e) {
       console.log(e);
@@ -80,6 +94,7 @@ export const RegisterdApp = () => {
             category: "",
             chain: "",
             description: "",
+            websiteUrl: "",
             sourceCode: "",
             videoDemo: "",
             telegram: "",
@@ -92,8 +107,8 @@ export const RegisterdApp = () => {
           }}
         >
           {({ setFieldValue }) => (
-            <Form className="space-y-4">
-              <div className=" flex justify-between lg:grid grid-cols-2 space-y-2 ">
+            <Form className="space-y-4" onSubmit={submit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="dAppName" className="block font-medium">
                     dApp Name
@@ -101,7 +116,7 @@ export const RegisterdApp = () => {
                   <Field
                     id="dAppName"
                     name="dAppName"
-                    className="border border-gray-300 p-2 rounded mr-4 focus:outline-none focus:ring focus:border-blue-300 text-black"
+                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring focus:border-blue-300 text-black"
                   />
                   <ErrorMessage
                     name="dAppName"
@@ -110,7 +125,10 @@ export const RegisterdApp = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="logo" className="block font-medium">
+                  <label
+                    htmlFor="logo"
+                    className="block font-medium mb-2 text-white"
+                  >
                     dApp Logo
                   </label>
                   <input
@@ -118,7 +136,7 @@ export const RegisterdApp = () => {
                     name="logo"
                     type="file"
                     onChange={(event) => {}}
-                    className="flex border border-gray-300 p-2 rounded mr-4 focus:outline-none focus:ring focus:border-blue-300"
+                    className="border w-full border-gray-300 p-2 rounded focus:outline-none focus:ring focus:border-blue-300"
                   />
                   <ErrorMessage
                     name="logo"
@@ -126,15 +144,17 @@ export const RegisterdApp = () => {
                     className="text-red-500"
                   />
                 </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="category" className="block font-medium">
+                  <label htmlFor="category" className="block font-medium mb-2">
                     Category
                   </label>
                   <Field
                     as="select"
                     id="category"
                     name="category"
-                    className=" border border-gray-300 p-2 rounded mr-4 focus:outline-none focus:ring focus:border-blue-300 text-black"
+                    className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring focus:border-blue-300 text-black"
                   >
                     <option value="">select your dApp category</option>
                     <option value="DeFi">DeFi</option>
@@ -150,14 +170,14 @@ export const RegisterdApp = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="chain" className="block font-medium">
+                  <label htmlFor="chain" className="block font-medium mb-2">
                     Chain
                   </label>
                   <Field
                     as="select"
                     id="chain"
                     name="chain"
-                    className=" border border-gray-300 text-black p-2 rounded focus:outline-none focus:ring focus:border-blue-300"
+                    className=" border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring focus:border-blue-300 text-black"
                   >
                     <option value="">Select the chain</option>
                     <option value="Lisk">Lisk</option>
@@ -183,7 +203,7 @@ export const RegisterdApp = () => {
                   as="textarea"
                   id="description"
                   name="description"
-                  className="w-full border text-black border-gray-300 p-2 rounded focus:outline-none focus:ring focus:border-blue-300"
+                  className="w-full border h-32 text-black border-gray-300 p-2 rounded focus:outline-none focus:ring focus:border-blue-300"
                 />
                 <ErrorMessage
                   name="description"
@@ -193,8 +213,24 @@ export const RegisterdApp = () => {
               </div>
 
               <div>
+                <label htmlFor="websiteUrl" className="block font-medium">
+                  Website (URL)
+                </label>
+                <Field
+                  id="websiteUrl"
+                  name="websiteUrl"
+                  className="w-full border text-black border-gray-300 p-2 rounded focus:outline-none focus:ring focus:border-blue-300"
+                />
+                <ErrorMessage
+                  name="websiteUrl"
+                  component="div"
+                  className="text-red-500"
+                />
+              </div>
+
+              <div>
                 <label htmlFor="sourceCode" className="block font-medium">
-                  Source code (smart contract)
+                  Source code (Github link)
                 </label>
                 <Field
                   id="sourceCode"
@@ -224,8 +260,8 @@ export const RegisterdApp = () => {
                 />
               </div>
 
-              <div className="bg-gray-300 rounded-lg mb-0">
-                <h1 className="text-2xl font-bold mb-6 text-center  text-black">
+              <div className="bg-gradient-to-r from-transparent via-gray-300 to-transparent rounded-lg mb-0">
+                <h1 className="text-2xl font-bold mb-6 text-center text-black">
                   Developer socials
                 </h1>
               </div>
@@ -281,7 +317,7 @@ export const RegisterdApp = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-blue-500 text-white p-2 rounded hover:bg-opacity-80"
+                  className="w-full bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                 >
                   Submit
                 </button>
@@ -295,50 +331,3 @@ export const RegisterdApp = () => {
 };
 
 export default RegisterdApp;
-{
-  /* <section className="mx-auto max-w-md space-y-6 px-4 py-8">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold">Register dApps</h1>
-            <p className="text-gray-500 ">
-              Fill out the form to register a dApp.
-            </p>
-          </div>
-          <form onSubmit={submit} className="">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="name">dApp Name</Label>
-                <Input id="name" name="name" required />
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="picture">dApp Icon</Label>
-                <Input id="picture" type="file" />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="venue">Source code(Github Link)</Label>
-                <Input id="venue" name="venue" required />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="name">dApp Description</Label>
-                <Textarea id="description" name="description" required />
-              </div>
-              <div className="items-top flex space-x-2">
-                <Checkbox id="terms1" />
-                <div className="grid gap-1.5 leading-none">
-                  <label
-                    htmlFor="terms1"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  ></label>
-                </div>
-              </div>
-            </div>
-            <Button
-              disabled={isPending}
-              className="mt-8 w-full"
-              type="submit"
-              variant="secondary"
-            >
-              {isPending ? "Creating..." : "Register dApp"}
-            </Button>
-          </form>
-        </section> */
-}

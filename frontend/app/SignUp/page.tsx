@@ -90,7 +90,7 @@ export const SignUpForm = () => {
               // value={firstName}
               // onChange={(e) => setFirstName(e.target.value)}
               name="firstname"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none  sm:text-sm opacity-90"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-black  sm:text-sm opacity-90"
               required
             />
           </div>
@@ -107,7 +107,7 @@ export const SignUpForm = () => {
               name="lastname"
               // value={lastName}
               // onChange={(e) => setLastName(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm opacity-90"
+              className="mt-1 block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm opacity-90"
               required
             />
           </div>
@@ -124,7 +124,7 @@ export const SignUpForm = () => {
               name="username"
               // value={username}
               // onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm opacity-90"
+              className="mt-1 block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm opacity-90"
               required
             />
           </div>

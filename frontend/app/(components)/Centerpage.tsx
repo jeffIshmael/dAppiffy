@@ -8,6 +8,7 @@ import { LandingProductFeatureKeyPoints } from "@/components/landing/LandingProd
 import { LandingTestimonialGrid } from "@/components/landing/testimonial/LandingTestimonialGrid";
 import { LandingTestimonialReadMoreWrapper } from "@/components/landing/testimonial/LandingTestimonialReadMoreWrapper";
 import { LandingFaqSection } from '@/components/landing/LandingFaq';
+import Link from "next/link";
 
 
 export default function LandPage() {
@@ -96,12 +97,16 @@ export default function LandPage() {
         backgroundGlowVariant="secondary"
         leadingComponent={<LandingProductHuntAward />}
       >
-        <Button size="xl" variant="secondary" asChild>
-          <a href="#">Explore events</a>
-        </Button>
-        <Button size="xl" variant="outlineSecondary">
-          <a href="#">Join dao</a>
-        </Button>
+        <Link href={"/ExploreDapps"}>
+          <Button size="xl" variant="secondary" asChild>
+            Explore dApps
+          </Button>
+        </Link>
+        <Link href={"/dAppify-DAO"}>
+          <Button size="xl" variant="outlineSecondary">
+            dAppify-DAO
+          </Button>
+        </Link>
         <LandingDiscount
           discountValueText="$350 off"
           discountDescriptionText="for the first 10 customers (2 left)"
