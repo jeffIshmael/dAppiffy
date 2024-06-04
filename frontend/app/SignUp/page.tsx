@@ -1,12 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import ConnectButton from "../(components)/Connect";
+
 import Link from "next/link";
-import { useWriteContract, useConnect, useDisconnect, useAccount } from "wagmi";
+import { useWriteContract, useDisconnect, useAccount } from "wagmi";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { Toaster, toast } from "sonner";
+import {  toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AlertCircle, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

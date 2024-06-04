@@ -10,7 +10,6 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import { ethers } from "ethers";
-import { strict } from "assert";
 
 export const RegisterdApp = () => {
   const { address, isConnected } = useAccount();
@@ -59,14 +58,14 @@ export const RegisterdApp = () => {
       const hash = await writeContractAsync({
         address: DAPPIFYCONTRACT,
         abi: dAppifyABI,
-        functionName: "proposeDapp",
+        functionName: "registerDapp",
         args: [params],
         value: ethers.parseUnits("260000000000000", "wei"),
       });
       if (hash) {
         console.log(hash);
         toast("dApp has been registered successfully");
-        router.push("/ExploredApps");
+        router.push("/ExploreDapps");
       }
     } catch (e) {
       console.log(e);

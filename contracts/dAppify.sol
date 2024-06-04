@@ -3,12 +3,12 @@ pragma solidity ^0.8.0;
 
 contract dAppify{
 
-    uint totalusers;
-    uint totalRegisteredDapps;
-    uint subscriptionPay = 260000000000000;
+    uint  totalusers;
+    uint public totalRegisteredDapps;
+    uint constant subscriptionPay = 260000000000000;
     address public owner;
-    uint totalDAOmem;
-    uint totalProposals;
+    uint  public totalDAOmem;
+    uint public totalProposals;
 
 
     constructor() {
@@ -113,6 +113,7 @@ contract dAppify{
     mapping (uint => DAOMember) public DAOmembers;
 
     dApp[] public dAppsList;
+    DAOMember[] public DAOs;
 
     //event for making a proposal
     event ProposalCreated(uint proposalId, string dAppName,
@@ -153,13 +154,13 @@ contract dAppify{
     function signUp(string memory _firstName, string memory _secondName, string memory _userName) public {
         require(!Exist(_userName), "username already taken");
         require(!registered(msg.sender),"the address is already registered");
-        address _myAddress = msg.sender;
+        
         uint _userId = totalusers;
-        ourUsers[_userName]= User(_userId,_firstName , _secondName, _userName,0, _myAddress);
-        users[_userId] = User(_userId,_firstName , _secondName, _userName,0, _myAddress);
-        userAddress[_myAddress] = User(_userId,_firstName , _secondName, _userName,0, _myAddress);
+        ourUsers[_userName]= User(_userId,_firstName , _secondName, _userName,0, msg.sender);
+        users[_userId] = User(_userId,_firstName , _secondName, _userName,0, msg.sender);
+        userAddress[msg.sender] = User(_userId,_firstName , _secondName, _userName,0, msg.sender);
         totalusers++;
-        emit userRegistered(_userId,_firstName , _secondName, _userName, 0,_myAddress);
+        emit userRegistered(_userId,_firstName , _secondName, _userName, 0,msg.sender);
         }
 
     //function to join the DAO
@@ -170,7 +171,13 @@ contract dAppify{
         require(msg.value > 0, "Enter an amount");
         (bool sent, ) = address(this).call{value: msg.value}("");
         if (sent){
-            DaoMem[_userName] = DAOMember(_userId, _userName , msg.sender);
+            DAOMember storage newDAOMember = DaoMem[_userName];
+            newDAOMember.username = _userName;
+            newDAOMember.userId = _userId;
+            newDAOMember.memberAddress = msg.sender;
+
+            DAOs.push(newDAOMember);
+            totalDAOmem++;
             emit succJoined(_userId, _userName, msg.sender);
         } else {
             return;
@@ -178,10 +185,10 @@ contract dAppify{
         
     }
 
-    //function to get user
-    function getUser(string memory _userName) public view returns(User memory){
-        return ourUsers[_userName];
-    }
+    // //function to get user
+    // function getUser(string memory _userName) public view returns(User memory){
+    //     return ourUsers[_userName];
+    // }
 
     //function to get total number of users
     function totalUsers() public view returns (uint) {
@@ -202,7 +209,8 @@ contract dAppify{
         require(msg.value == subscriptionPay, "Enter the correct price");
         (bool sent, ) = address(this).call{value: msg.value}("");
         if (sent){
-            uint _proposalId = totalProposals++;
+            
+            uint _proposalId = totalProposals;
             uint _endtime = block.timestamp + 24 hours;
             Proposal storage newProposal = IdProposal[_proposalId ];
             newProposal.proposalId = _proposalId;
@@ -219,7 +227,8 @@ contract dAppify{
             newProposal.endtime = _endtime;
             newProposal.proposer = msg.sender;
 
-
+            totalProposals++;
+            
             emit ProposalCreated(_proposalId, params.dAppName,
             params.category,
             params.chain,
@@ -240,6 +249,7 @@ contract dAppify{
         require(msg.value == subscriptionPay, "Enter the correct price");
         (bool sent, ) = address(this).call{value: msg.value}("");
         if (sent){
+            
             uint _dAppId = totalRegisteredDapps;
             dApp storage newdApp = dAppsMap[_dAppId];
             newdApp.dAppId = _dAppId;
@@ -254,8 +264,11 @@ contract dAppify{
             newdApp.telegram = params.telegram;
             newdApp.discord = params.discord;
             newdApp.email = params.email;
-            
+
+            totalRegisteredDapps++;
+
             dAppsList.push(newdApp);
+          
             emit dAppRegistered(_dAppId, params.dAppName,
             params.category,
             params.chain,
@@ -290,6 +303,42 @@ contract dAppify{
             proposal.isApproved = true;
             emit ProposalApproved(_proposalId);
         }
+    }
+
+    function getProposal(uint proposalId) public view returns (
+        uint,
+        string memory,
+        string memory,
+        string memory,
+        string memory,
+        uint,
+        uint,
+        uint,
+        address,
+        bool
+    ) {
+        Proposal storage proposal = IdProposal[proposalId];
+        return (
+            proposal.proposalId,    
+            proposal.dAppName,
+            proposal.description,
+            proposal.category,
+            proposal. chain,
+            proposal.yesVotes,
+            proposal.noVotes,
+            proposal.endtime,
+            proposal.proposer,
+            proposal.isApproved
+        );
+    }
+
+
+    function getAllProposalIds() public view returns (uint[] memory) {
+        uint[] memory ids = new uint[](totalProposals);
+        for (uint i = 0; i < totalProposals; i++) {
+            ids[i] = i;
+        }
+        return ids;
     }
 
 
