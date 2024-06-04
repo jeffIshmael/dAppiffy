@@ -3,17 +3,18 @@
 import React from "react";
 import { DAPPIFYCONTRACT } from "../constants/constant";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
-import { useReadContract, useAccount } from "wagmi";
+import { useReadContract } from "wagmi";
 import Link from "next/link";
 import Navbar from "../(components)/Nav";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+
 
 const AllDapps = () => {
   const {
     data: dApps,
     isPending,
+    isFetching,
     error,
   } = useReadContract({
     address: DAPPIFYCONTRACT,
@@ -21,22 +22,37 @@ const AllDapps = () => {
     functionName: "getAllDapps",
   });
 
+  interface DApp {
+    category: string;
+    chain: string;
+    dAppId: string;
+    dAppName: string;
+    dAppreg: string;
+    demolink: string;
+    description: string;
+    discord: string;
+    email: string;
+    sourceCode: string;
+    telegram: string;
+    url: string;
+  }
+
   console.log(dApps);
 
   return (
-    <main className="flex flex-col">
+    <main className="px-4 flex flex-col">
       <Navbar />
-      <section className="mx-auto max-w-6xl px-4 py-12 md:py-16 lg:py-20">
+      <section className="py-6">
         <div className="space-y-6 md:space-y-8 lg:space-y-10">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold md:text-4xl lg:text-5xl">
-              latest dApps
+              Latest dApps
             </h1>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-10">
-            {dApps == 0 && (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-10">
+            {dApps?.length === 0 && (
               <div className="flex h-screen items-center justify-center">
-                <p className="text-black">No dApps found</p>
+                <p>No dApps yet</p>
               </div>
             )}
             {error && (
@@ -44,38 +60,64 @@ const AllDapps = () => {
                 <p>
                   Error fetching dApps, connect wallet if not connected and try
                   again
+                  {error.message}
                 </p>
               </div>
             )}
             {isPending ? (
-              <Skeleton className="h-[250px] w-full object-cover" />
+              <Skeleton className="h-[250px] rounded-xl" />
             ) : (
-              <div>
-                <h2 className="text-xl font-bold mb-4">dApps</h2>
-
-                <div className="bg-white p-4 shadow rounded-lg">
-                  <div className="flex items-center justify-center w-full h-[200px] object-cover rounded-t-lg">
+              dApps?.map((dApp: DApp, index: number) => (
+                <Link href={`#`} key={index}>
+                  <div
+                    key={index}
+                    className="overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg hover:cursor-pointer"
+                  >
+                    {/* TODO: Replace with users uploaded image */}
                     <Image
-                      alt="logo"
-                      className="h-full w-full object-cover"
+                      alt="Event 1"
+                      className="h-60 w-full object-cover"
                       height="200"
-                      src={"/static/images/Tapswap.jpeg"}
+                      src="/static/images/MADANA.jpg"
                       style={{
                         aspectRatio: "300/200",
                         objectFit: "cover",
                       }}
                       width="300"
                     />
+                    <div className="p-4 md:p-6">
+                      <div className="flex items-center justify-between">
+                        <h3 className="mb-2 text-lg font-semibold md:text-xl text-black">
+                          {dApp.dAppName}
+                        </h3>
+                        <button
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => {
+                            window.open(dApp.sourceCode, "_blank");
+                          }}
+                        >
+                          Download
+                        </button>
+                      </div>
+                      <div className="mb-3 flex items-center space-x-2">
+                        <p className="text-gray-700">
+                          Category: {dApp.category}
+                        </p>
+                      </div>
+                      <div className="mb-3 flex items-center space-x-2">
+                        <p className="text-gray-700">Chain {dApp.chain}</p>
+                      </div>
+                      <div className="mb-3 flex items-center space-x-2">
+                        <p className="text-gray-700">Website {dApp.url}</p>
+                      </div>
+                      <p className="line-clamp-2 text-gray-600">
+                        <h2>About dApp</h2>
+                        {dApp.description}
+                      </p>
+                    </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-lg text-black font-semibold mb-2">TapSwap</h3>
-                    <p className="text-sm text-black mb-4">Tapswap is a decentralized exchange (DEX) built on the Ethereum blockchain. It allows users to swap one cryptocurrency for another directly without the need for intermediaries like centralized exchanges. Tapswap leverages smart contracts to facilitate these swaps securely and transparently, providing users with control over their assets while maintaining privacy and security. Users can trade various tokens with ease, contributing to liquidity pools and earning fees for providing liquidity. </p>
-                    <Link href={"#"}className="text-primary">
-                      View dApp
-                    </Link>
-                  </div>
-                </div>
-              </div>
+                </Link>
+              ))
             )}
           </div>
         </div>

@@ -322,6 +322,35 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "DAOs",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "userId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "username",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "memberAddress",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "string",
                 "name": "",
                 "type": "string"
@@ -693,6 +722,19 @@
     },
     {
         "inputs": [],
+        "name": "getAllProposalIds",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "getAllUsers",
         "outputs": [
             {
@@ -739,49 +781,62 @@
     {
         "inputs": [
             {
-                "internalType": "string",
-                "name": "_userName",
-                "type": "string"
+                "internalType": "uint256",
+                "name": "proposalId",
+                "type": "uint256"
             }
         ],
-        "name": "getUser",
+        "name": "getProposal",
         "outputs": [
             {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "userId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "firstName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "secondName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "userName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "Downloads",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "myAddress",
-                        "type": "address"
-                    }
-                ],
-                "internalType": "struct dAppify.User",
+                "internalType": "uint256",
                 "name": "",
-                "type": "tuple"
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
             }
         ],
         "stateMutability": "view",
@@ -1145,6 +1200,45 @@
         "name": "signUp",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "totalDAOmem",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "totalProposals",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "totalRegisteredDapps",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
