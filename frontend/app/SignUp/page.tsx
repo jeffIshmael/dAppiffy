@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 
 import Link from "next/link";
-import { useWriteContract, useDisconnect, useAccount } from "wagmi";
+import { useWriteContract, useAccount } from "wagmi";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+
 import { AlertCircle, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { DAPPIFYCONTRACT } from "../constants/constant";

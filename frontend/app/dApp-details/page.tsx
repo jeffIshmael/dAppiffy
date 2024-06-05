@@ -7,7 +7,7 @@ import { useReadContract } from "wagmi";
 import Navbar from "../(components)/Nav";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function dAppDetailsPage({
+export default function DAppDetailsPage({
   params,
 }: {
   params: { index: number };
