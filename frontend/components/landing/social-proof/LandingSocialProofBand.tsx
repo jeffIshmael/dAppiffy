@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import React from "react";
 
 /**
  * Highlights important features, milestones or testimonials of your product.

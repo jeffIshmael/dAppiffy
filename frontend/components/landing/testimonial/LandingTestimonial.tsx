@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { BadgeCheck } from 'lucide-react';
 import Image from '@/components/shared/Image';
+import React from "react";
 
 export interface TestimonialItem {
   className?: string;

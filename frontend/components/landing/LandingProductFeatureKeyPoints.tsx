@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { CheckIcon } from 'lucide-react';
+import React from 'react';
 
 export interface KeyPoint {
   title: string;

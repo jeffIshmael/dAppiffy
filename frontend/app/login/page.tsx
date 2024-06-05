@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
-import { Toaster, toast } from "sonner";
+
 import { useReadContract, useAccount } from "wagmi";
 import React, { useState } from "react";
 
@@ -16,20 +16,18 @@ import { DAPPIFYCONTRACT } from "../constants/constant";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
-
 export const LoginPage = () => {
-  const { open, close } = useWeb3Modal();
+  const { open } = useWeb3Modal();
   const { isConnected, address } = useAccount();
   const auth = useAuth();
   const router = useRouter();
   const [userName, setUsername] = useState("user");
 
   const {
-    data: readdata,
     error,
     isSuccess,
     isRefetching,
-    isFetched,
+
     refetch,
   } = useReadContract({
     abi: dAppifyABI,
@@ -42,7 +40,7 @@ export const LoginPage = () => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
-    const user = setUsername(data.username as string);
+    setUsername(data.username as string);
 
     if (!isConnected) {
       await open();

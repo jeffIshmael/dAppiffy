@@ -14,7 +14,6 @@ const AllDapps = () => {
   const {
     data: dApps,
     isPending,
-    isFetching,
     error,
   } = useReadContract({
     address: DAPPIFYCONTRACT,

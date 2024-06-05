@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import React from "react";
 
 /**
  * This component is meant to be used in the landing page, in the features list.

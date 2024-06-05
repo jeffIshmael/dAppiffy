@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import Image from '@/components/shared/Image';
 import { GlowBg } from '@/components/shared/ui/glow-bg';
 import { VideoPlayer } from '@/components/shared/VideoPlayer';
+import React from "react";
 
 const LandingPrimaryCtaContent = ({
   className,

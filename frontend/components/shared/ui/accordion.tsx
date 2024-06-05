@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
 
@@ -19,6 +20,9 @@ const AccordionItem = React.forwardRef<
   />
 ));
 AccordionItem.displayName = 'AccordionItem';
+AccordionItem.propTypes = {
+  className: PropTypes.string,
+};
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
@@ -39,6 +43,10 @@ const AccordionTrigger = React.forwardRef<
   </AccordionPrimitive.Header>
 ));
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
+AccordionTrigger.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node,
+};
 
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
@@ -56,5 +64,9 @@ const AccordionContent = React.forwardRef<
   </AccordionPrimitive.Content>
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
+AccordionContent.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node,
+};
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };

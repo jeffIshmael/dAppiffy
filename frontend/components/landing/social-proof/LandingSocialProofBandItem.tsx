@@ -1,6 +1,7 @@
 import { LandingRating } from '@/components/landing/rating/LandingRating';
 import clsx from 'clsx';
 import { CheckCheckIcon, GiftIcon, TrophyIcon, Wand2Icon } from 'lucide-react';
+import React from "react";
 
 /**
  * Shows a social proof/key feature/milestone item with an optional graphic.

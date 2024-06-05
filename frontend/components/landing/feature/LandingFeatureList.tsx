@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import { LandingFeature } from '@/components/landing/feature/LandingFeature';
 import { GlowBg } from '@/components/shared/ui/glow-bg';
+import React from "react";
 
 export interface FeatureListItem {
   title: string;

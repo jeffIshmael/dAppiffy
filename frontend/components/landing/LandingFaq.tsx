@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { GlowBg } from '@/components/shared/ui/glow-bg';
+import React from "react";
 
 export interface FaqItem {
   question: string;

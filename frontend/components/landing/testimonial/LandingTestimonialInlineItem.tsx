@@ -1,6 +1,7 @@
 import { LandingRating } from '@/components/landing/rating/LandingRating';
 import { LandingAvatar } from '@/components/landing/social-proof/LandingAvatar';
 import { clsx } from 'clsx';
+import React from "react";
 
 /**
  * Use this component to display a single testimonial inline. Use this to highlight short customer testimonials or reviews. are meant as short validation and are usually support for a primary or secondary Call to action.

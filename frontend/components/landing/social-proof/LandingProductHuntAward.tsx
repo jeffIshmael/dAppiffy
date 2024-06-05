@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import React from "react";
 
 const getFormattedPlaceFromNumber = (place: number) => {
   if (place % 10 === 1) return `${place}st`;
