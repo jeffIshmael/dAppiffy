@@ -2,8 +2,7 @@
 
 import Nav from "./(components)/Nav";
 import LandPage from "./(components)/Centerpage";
-import { AuthProvider } from "../context/AuthContext";
-import { AppProps } from "next/app";
+import React from "react";
 
 export default function Home() {
   return (

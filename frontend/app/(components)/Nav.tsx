@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -9,17 +10,14 @@ import {
   Cloud,
   CreditCard,
   Github,
-  Keyboard,
   LifeBuoy,
   LogOut,
   Mail,
   MessageSquare,
-  Plus,
   PlusCircle,
   Settings,
   User,
   UserPlus,
-  Users,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -36,12 +34,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
 import { useDisconnect } from "wagmi";
 
 const Navbar: React.FC = () => {
   const auth = useAuth();
-  const router = useRouter();
+  
   const { disconnect } = useDisconnect();
   const [mounted, setMounted] = useState(false);
 

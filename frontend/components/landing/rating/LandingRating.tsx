@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { StarHalfIcon, StarIcon } from 'lucide-react';
+import React from "react";
 
 /**
  * Shows a rating with stars.

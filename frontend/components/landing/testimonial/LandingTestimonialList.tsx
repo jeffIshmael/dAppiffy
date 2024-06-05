@@ -3,6 +3,7 @@ import {
   LandingTestimonial,
   TestimonialItem,
 } from '@/components/landing/testimonial/LandingTestimonial';
+import React from "react";
 
 /**
  * Shows a list of testimonials with a title and description.

@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@/components/shared/ui/button";
 import { LandingPrimaryVideoCtaSection } from "@/components/landing/cta/LandingPrimaryCta";
 import { LandingProductHuntAward } from "@/components/landing/social-proof/LandingProductHuntAward";

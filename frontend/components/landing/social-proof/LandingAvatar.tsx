@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import Image from '@/components/shared/Image';
+import React from "react";
 
 export interface SocialProofItem {
   imageSrc: string;

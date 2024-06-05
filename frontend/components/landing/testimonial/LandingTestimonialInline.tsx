@@ -1,4 +1,5 @@
 import { clsx } from 'clsx';
+import React from "react";
 
 /**
  * A component meant to be used in the landing page.

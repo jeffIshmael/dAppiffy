@@ -2,19 +2,17 @@
 
 import React, { useState } from "react";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
-import { Toaster, toast } from "sonner";
-import { useReadContract, useAccount, useWriteContract } from "wagmi";
-import { useWeb3Modal } from "@web3modal/wagmi/react";
+import { toast } from "sonner";
+import { useAccount, useWriteContract } from "wagmi";
 import { DAPPIFYCONTRACT } from "../constants/constant";
 import { ethers } from "ethers";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export const DAppifyDAO = () => {
-  const { isPending, error, writeContractAsync } = useWriteContract();
-  const { open } = useWeb3Modal();
-  const { isConnected, address } = useAccount();
+  const { error, writeContractAsync } = useWriteContract();
+
+  const { isConnected } = useAccount();
   const [err, setErr] = useState("");
-  const [success, setSuccess] = useState("");
 
   async function submit() {
     if (isConnected) {
@@ -30,6 +28,7 @@ export const DAppifyDAO = () => {
           console.log(hash);
           toast("You have successfully joined the DAO");
           setErr("");
+          console.log(err);
           // disconnect();
         } else {
           setErr("An error occurred while joining the DAO.");
@@ -116,8 +115,8 @@ export const DAppifyDAO = () => {
           </li>
           <li>
             Active Participation: You commit to actively participating in the
-            DAO&apos;s activities, including voting on proposals and contributing to
-            discussions and reviews.
+            DAO&apos;s activities, including voting on proposals and
+            contributing to discussions and reviews.
           </li>
           <li>
             Stake Requirements: You understand that staking tokens is a
@@ -154,10 +153,10 @@ export const DAppifyDAO = () => {
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
           <p className="text-gray-600">
-            By clicking &quot;Agree,&quot; you acknowledge that you have read, understood,
-            and agree to the terms and conditions outlined above. Your journey
-            towards building and safeguarding the future of decentralized
-            applications begins here.
+            By clicking &quot;Agree,&quot; you acknowledge that you have read,
+            understood, and agree to the terms and conditions outlined above.
+            Your journey towards building and safeguarding the future of
+            decentralized applications begins here.
           </p>
         </label>
       </div>

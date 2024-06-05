@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/shared/ui/accordion';
+import React from "react";
 
 export interface FaqItem {
   question: string;

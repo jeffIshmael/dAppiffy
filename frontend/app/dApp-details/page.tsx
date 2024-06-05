@@ -3,26 +3,18 @@
 import React from "react";
 import { DAPPIFYCONTRACT } from "../constants/constant";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
-import { useReadContract, useAccount } from "wagmi";
-
+import { useReadContract } from "wagmi";
 import Navbar from "../(components)/Nav";
 import { Skeleton } from "@/components/ui/skeleton";
-;
-import { useRouter } from "next/router";
 
 export default function dAppDetailsPage({
   params,
 }: {
   params: { index: number };
 }) {
-  const router = useRouter();
-
-  const { address, isConnected } = useAccount();
-
   const {
     data: dApp,
     isPending,
-    isFetching,
     error,
   } = useReadContract({
     address: DAPPIFYCONTRACT,
@@ -30,20 +22,20 @@ export default function dAppDetailsPage({
     functionName: "getdApp",
     args: [BigInt(params.index)],
   });
-  interface DApp {
-    category: string;
-    chain: string;
-    dAppId: string;
-    dAppName: string;
-    dAppreg: string;
-    demolink: string;
-    description: string;
-    discord: string;
-    email: string;
-    sourceCode: string;
-    telegram: string;
-    url: string;
-  }
+  // interface DApp {
+  //   category: string;
+  //   chain: string;
+  //   dAppId: string;
+  //   dAppName: string;
+  //   dAppreg: string;
+  //   demolink: string;
+  //   description: string;
+  //   discord: string;
+  //   email: string;
+  //   sourceCode: string;
+  //   telegram: string;
+  //   url: string;
+  // }
 
   console.log(dApp);
 

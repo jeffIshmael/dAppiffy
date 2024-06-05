@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useWriteContract, useDisconnect, useAccount } from "wagmi";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
-import {  toast } from "sonner";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AlertCircle, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -17,18 +17,16 @@ export const SignUpForm = () => {
   const [success, setSuccess] = useState("");
   const { isPending, writeContractAsync } = useWriteContract();
   const { open } = useWeb3Modal();
-  const { disconnect } = useDisconnect();
-  const router = useRouter();
-  const { isConnected, address } = useAccount();
+  const { isConnected } = useAccount();
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
-    const account = await open();
+    await open();
 
     if (isConnected) {
-      const ally = await toast("Account successfully connected");
+      await toast("Account successfully connected");
       try {
         const hash = await writeContractAsync({
           abi: dAppifyABI,

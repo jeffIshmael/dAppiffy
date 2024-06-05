@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { GiftIcon } from 'lucide-react';
+import React from "react";
 
 /**
  * A component meant to be used in the landing page.

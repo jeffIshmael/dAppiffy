@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react';
 import { PlayIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
+import React from "react";
 export const VideoPlayer = ({
   autoPlay = true,
   controls = true,

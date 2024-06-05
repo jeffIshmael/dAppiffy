@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Image from '@/components/shared/Image';
 import { GlowBg } from '@/components/shared/ui/glow-bg';
+import React from "react";
 
 /**
  * A component meant to be used in the landing page.

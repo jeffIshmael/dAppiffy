@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
 import "./globals.css";
@@ -9,14 +10,14 @@ import { headers } from "next/headers";
 import { Toaster } from "sonner";
 import { Inter as FontSans } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
-import { ReactNode } from "react";
+import  React from "react";
 
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+// const fontSans = FontSans({
+//   subsets: ["latin"],
+//   variable: "--font-sans",
+// });
 
-const inter = Inter({ subsets: ["latin"] });
+// Inter({ subsets: ["latin"] });
 const displayFont = Syne({
   subsets: ["latin"],
   display: "swap",
