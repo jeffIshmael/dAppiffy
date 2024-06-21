@@ -1,5 +1,5 @@
 
-// config/index.tsx
+
 
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 

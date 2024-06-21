@@ -7,10 +7,11 @@ import { useAccount, useWriteContract } from "wagmi";
 import { DAPPIFYCONTRACT } from "../constants/constant";
 import { ethers } from "ethers";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 export const DAppifyDAO = () => {
   const { error, writeContractAsync } = useWriteContract();
-
+  const router = useRouter();
   const { isConnected } = useAccount();
   const [err, setErr] = useState("");
 
@@ -29,7 +30,8 @@ export const DAppifyDAO = () => {
           toast("You have successfully joined the DAO");
           setErr("");
           console.log(err);
-          // disconnect();
+          router.push("/");
+          
         } else {
           setErr("An error occurred while joining the DAO.");
         }
