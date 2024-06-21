@@ -1,11 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export async function POST(request: NextRequest) {
   try {
     const data = await request.formData();
@@ -31,3 +25,6 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+// Use the new configuration format
+export const runtime = 'edge'; // Example configuration, adjust as needed
