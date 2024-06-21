@@ -1,5 +1,6 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { cn } from "@/lib/utils";
-import React from "react"
 
 function Skeleton({
   className,
@@ -11,6 +12,10 @@ function Skeleton({
       {...props}
     />
   )
+}
+
+Skeleton.propTypes = {
+  className: PropTypes.string,
 }
 
 export { Skeleton }

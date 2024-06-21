@@ -15,9 +15,9 @@ export const RegisterdApp = () => {
   const { address, isConnected } = useAccount();
   const router = useRouter();
   const { writeContractAsync } = useWriteContract();
-  const [file, setFile] = useState("");
+  // const [file, setFile] = useState("");
   const [cid, setCid] = useState("");
-  const [uploading, setUploading] = useState(false);
+  // const [uploading, setUploading] = useState(false);
   const inputFile = useRef(null);
 
   const validationSchema = Yup.object().shape({

@@ -53,14 +53,14 @@ const Navbar: React.FC = () => {
   const { isConnected, address } = useAccount();
   const { disconnect } = useDisconnect();
   const [prob, setProb] = useState("");
-  const [success, setSuccess] = useState("");
+  // const [success, setSuccess] = useState("");
   const [mounted, setMounted] = useState(false);
-  const [registered, setRegistered] = useState(false);
+  // const [registered, setRegistered] = useState(false);
   const [userName, setUserName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isPending, writeContractAsync } = useWriteContract();
   const [isHovered, setIsHovered] = useState(false);
-  const { error, isSuccess, isRefetching, refetch } = useReadContract({
+  const { error,  refetch } = useReadContract({
     abi: dAppifyABI,
     address: DAPPIFYCONTRACT,
     functionName: "getUser",
