@@ -31,15 +31,29 @@ const AllDapps = () => {
     description: string;
     discord: string;
     email: string;
+    ipfsHash: string;
     sourceCode: string;
     telegram: string;
     url: string;
   }
 
+  // const filterByCategory = (category: string): DApp[] => {
+  //   return dApps?.filter((dApp: DApp) => dApp.category === category) || [];
+  // };
+
+  // const Categories = [
+  //   "DeFi",
+  //   "NFT Collection",
+  //   "NFT Marketplace",
+  //   "Games",
+  //   "Others",
+  // ];
+
   console.log(dApps);
+  // console.log(dApps.ipfsHash);
 
   return (
-    <main className="px-4 flex flex-col">
+    <main className="px-2 flex flex-col">
       <Navbar />
       <section className="py-6">
         <div className="space-y-6 md:space-y-8 lg:space-y-10">
@@ -48,7 +62,7 @@ const AllDapps = () => {
               Latest dApps
             </h1>
           </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-10">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8 lg:grid-cols-6 lg:gap-10">
             {dApps?.length === 0 && (
               <div className="flex h-screen items-center justify-center">
                 <p>No dApps yet</p>
@@ -59,7 +73,6 @@ const AllDapps = () => {
                 <p>
                   Error fetching dApps, connect wallet if not connected and try
                   again
-                  {error.message}
                 </p>
               </div>
             )}
@@ -67,58 +80,68 @@ const AllDapps = () => {
               <Skeleton className="h-[250px] rounded-xl" />
             ) : (
               dApps?.map((dApp: DApp, index: number) => (
-                <Link href={`#`} key={index}>
-                  <div
-                    key={index}
-                    className="overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg hover:cursor-pointer"
-                  >
-                    {/* TODO: Replace with users uploaded image */}
-                    <Image
-                      alt="Event 1"
-                      className="h-60 w-full object-cover"
-                      height="200"
-                      src="/static/images/MADANA.jpg"
-                      style={{
-                        aspectRatio: "300/200",
-                        objectFit: "cover",
-                      }}
-                      width="300"
-                    />
-                    <div className="p-4 md:p-6">
-                      <div className="flex items-center justify-between">
-                        <h3 className="mb-2 text-lg font-semibold md:text-xl text-black">
-                          {dApp.dAppName}
-                        </h3>
-                        <button
-                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                          onClick={() => {
-                            window.open(dApp.sourceCode, "_blank");
-                          }}
-                        >
-                          Download
-                        </button>
+                <Link href={`/dAppdetails/${index}`} key={index}>
+                  <div key={index}>
+                    <div>
+                      <div className="flex flex-col space-y-2 p-2 shadow-md rounded-xl">
+                        <div>
+                          <Image
+                            alt="App Icon"
+                            height="200"
+                            src={`https://ipfs.io/ipfs/${dApp.ipfsHash}`}
+                            width="200"
+                            className="object-cover rounded-xl"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <h3 className="text-lg font-semibold md:text-base text-white">
+                            {dApp.dAppName}
+                          </h3>
+                          <p className="text-gray-500 text-sm">
+                            {dApp.category}
+                          </p>
+                        </div>
                       </div>
-                      <div className="mb-3 flex items-center space-x-2">
-                        <p className="text-gray-700">
-                          Category: {dApp.category}
-                        </p>
-                      </div>
-                      <div className="mb-3 flex items-center space-x-2">
-                        <p className="text-gray-700">Chain {dApp.chain}</p>
-                      </div>
-                      <div className="mb-3 flex items-center space-x-2">
-                        <p className="text-gray-700">Website {dApp.url}</p>
-                      </div>
-                      <p className="line-clamp-2 text-gray-600">
-                        <h2>About dApp</h2>
-                        {dApp.description}
-                      </p>
                     </div>
                   </div>
                 </Link>
               ))
             )}
           </div>
+          {/* <div>
+            {Categories.map((category) => (
+              <div key={category}>
+                <h2>{category}</h2>
+                {filterByCategory(category).map((dApp: DApp, index: number) => (
+                  <Link href={`/dAppdetails/${index}`} key={index}>
+                    <div key={index}>
+                      <div>
+                        <div className="flex flex-col space-y-2 p-2 shadow-md rounded-xl">
+                          <div>
+                            <Image
+                              alt="App Icon"
+                              height="200"
+                              src={`https://ipfs.io/ipfs/${cid}`}
+                              width="200"
+                              className="object-cover rounded-xl"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <h3 className="text-lg font-semibold md:text-base text-white">
+                              {dApp.dAppName}
+                            </h3>
+                            <p className="text-gray-500 text-sm">
+                              {dApp.category}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div> */}
+            {/* ))} */}
+          {/* </div> */}
         </div>
       </section>
     </main>

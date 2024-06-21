@@ -35,6 +35,12 @@
             {
                 "indexed": false,
                 "internalType": "string",
+                "name": "ipfsHash",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
                 "name": "category",
                 "type": "string"
             },
@@ -157,6 +163,12 @@
             {
                 "indexed": false,
                 "internalType": "string",
+                "name": "ipfsHash",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
                 "name": "category",
                 "type": "string"
             },
@@ -251,18 +263,6 @@
                 "internalType": "uint256",
                 "name": "userId",
                 "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "firstName",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "secondName",
-                "type": "string"
             },
             {
                 "indexed": false,
@@ -380,6 +380,54 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "DownloadsArray",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "dAppId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "myAddress",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "DownloadsUint",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "dAppId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "myAddress",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "string",
                 "name": "_userName",
                 "type": "string"
@@ -414,6 +462,11 @@
             {
                 "internalType": "string",
                 "name": "dAppName",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "ipfsHash",
                 "type": "string"
             },
             {
@@ -512,6 +565,11 @@
             },
             {
                 "internalType": "string",
+                "name": "ipfsHash",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
                 "name": "category",
                 "type": "string"
             },
@@ -586,6 +644,11 @@
             },
             {
                 "internalType": "string",
+                "name": "ipfsHash",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
                 "name": "category",
                 "type": "string"
             },
@@ -639,7 +702,13 @@
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_dAppId",
+                "type": "uint256"
+            }
+        ],
         "name": "download",
         "outputs": [],
         "stateMutability": "nonpayable",
@@ -659,6 +728,11 @@
                     {
                         "internalType": "string",
                         "name": "dAppName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ipfsHash",
                         "type": "string"
                     },
                     {
@@ -746,16 +820,6 @@
                     },
                     {
                         "internalType": "string",
-                        "name": "firstName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "secondName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
                         "name": "userName",
                         "type": "string"
                     },
@@ -829,9 +893,85 @@
                 "type": "uint256"
             },
             {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_myAdd",
+                "type": "address"
+            }
+        ],
+        "name": "getUser",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "userId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "userName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "Downloads",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "myAddress",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct dAppify.User",
+                "name": "",
+                "type": "tuple"
             },
             {
                 "internalType": "bool",
@@ -862,6 +1002,11 @@
                     {
                         "internalType": "string",
                         "name": "dAppName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ipfsHash",
                         "type": "string"
                     },
                     {
@@ -933,30 +1078,6 @@
     {
         "inputs": [
             {
-                "internalType": "string",
-                "name": "_userName",
-                "type": "string"
-            },
-            {
-                "internalType": "address",
-                "name": "_user",
-                "type": "address"
-            }
-        ],
-        "name": "login",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "_myAdd",
                 "type": "address"
@@ -987,16 +1108,6 @@
                 "internalType": "uint256",
                 "name": "userId",
                 "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "firstName",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "secondName",
-                "type": "string"
             },
             {
                 "internalType": "string",
@@ -1037,6 +1148,11 @@
                     {
                         "internalType": "string",
                         "name": "dAppName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ipfsHash",
                         "type": "string"
                     },
                     {
@@ -1102,6 +1218,11 @@
                     {
                         "internalType": "string",
                         "name": "dAppName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ipfsHash",
                         "type": "string"
                     },
                     {
@@ -1183,16 +1304,6 @@
         "inputs": [
             {
                 "internalType": "string",
-                "name": "_firstName",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "_secondName",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
                 "name": "_userName",
                 "type": "string"
             }
@@ -1205,6 +1316,19 @@
     {
         "inputs": [],
         "name": "totalDAOmem",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "totalDownloads",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1255,6 +1379,19 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "totalusers",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "address",
@@ -1271,13 +1408,37 @@
             },
             {
                 "internalType": "string",
-                "name": "firstName",
+                "name": "userName",
                 "type": "string"
             },
             {
-                "internalType": "string",
-                "name": "secondName",
-                "type": "string"
+                "internalType": "uint256",
+                "name": "Downloads",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "myAddress",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "userArray",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "userId",
+                "type": "uint256"
             },
             {
                 "internalType": "string",
@@ -1312,16 +1473,6 @@
                 "internalType": "uint256",
                 "name": "userId",
                 "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "firstName",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "secondName",
-                "type": "string"
             },
             {
                 "internalType": "string",

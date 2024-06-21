@@ -3,12 +3,13 @@ pragma solidity ^0.8.0;
 
 contract dAppify{
 
-    uint  totalusers;
+    uint public totalusers;
     uint public totalRegisteredDapps;
     uint constant subscriptionPay = 260000000000000;
     address public owner;
     uint  public totalDAOmem;
     uint public totalProposals;
+    uint public totalDownloads;
 
 
     constructor() {
@@ -25,8 +26,6 @@ contract dAppify{
     //struct of the user
     struct User{
         uint userId;
-        string firstName;
-        string secondName;
         string userName;
         uint Downloads;
         address myAddress;
@@ -39,10 +38,17 @@ contract dAppify{
         address memberAddress;
     }
 
+    //struct of download
+    struct Downloads{
+        uint dAppId;
+        address myAddress;
+    }
+
     //struct for proposed dApp
     struct Proposal {
         uint proposalId;
         string dAppName;
+        string ipfsHash;
         string description;
         string category;
         string chain;
@@ -60,11 +66,11 @@ contract dAppify{
         bool isApproved;
     }
 
-
     //struct of registered dApp
     struct dApp{
         uint dAppId;
         string dAppName;
+        string ipfsHash;
         string category;
         string chain;
         string description;
@@ -80,6 +86,7 @@ contract dAppify{
     //struct params to simplify functions
     struct Params{
         string dAppName;
+        string ipfsHash;
         string category;
         string chain;
         string description;
@@ -112,11 +119,16 @@ contract dAppify{
     //mapping of index of user struct
     mapping (uint => DAOMember) public DAOmembers;
 
+    //mapping of uint to Downloads Struct
+    mapping (uint => Downloads) public DownloadsUint;
+
     dApp[] public dAppsList;
     DAOMember[] public DAOs;
+    User[] public userArray;
+    Downloads[] public DownloadsArray;
 
     //event for making a proposal
-    event ProposalCreated(uint proposalId, string dAppName,
+    event ProposalCreated(uint proposalId, string dAppName, string ipfsHash,
         string category,string chain,
         string description,
         string url,
@@ -137,10 +149,10 @@ contract dAppify{
     event succJoined(uint userId, string userName, address memberAddress);
 
     //event for registered user
-    event userRegistered(uint userId, string firstName ,string secondName, string userName ,uint Downloads ,address myAddress);
+    event userRegistered(uint userId, string userName ,uint Downloads ,address myAddress);
 
     //event for registered Dapp
-    event dAppRegistered(uint dAppId, string dAppName, string category,string chain,
+    event dAppRegistered(uint dAppId, string dAppName, string ipfsHash, string category,string chain,
         string description,
         string url,
         string sourceCode,
@@ -151,45 +163,62 @@ contract dAppify{
         string email);
 
     //function to register user
-    function signUp(string memory _firstName, string memory _secondName, string memory _userName) public {
+    function signUp(string memory _userName) public {
         require(!Exist(_userName), "username already taken");
         require(!registered(msg.sender),"the address is already registered");
         
         uint _userId = totalusers;
-        ourUsers[_userName]= User(_userId,_firstName , _secondName, _userName,0, msg.sender);
-        users[_userId] = User(_userId,_firstName , _secondName, _userName,0, msg.sender);
-        userAddress[msg.sender] = User(_userId,_firstName , _secondName, _userName,0, msg.sender);
+        User memory newUser = User({
+            userId: _userId,
+            userName: _userName,
+            Downloads: 0,
+            myAddress: msg.sender
+        });
+
+        ourUsers[_userName] = newUser;
+        users[_userId] = newUser;
+        userAddress[msg.sender] = newUser;
+        userArray.push(newUser);
         totalusers++;
-        emit userRegistered(_userId,_firstName , _secondName, _userName, 0,msg.sender);
+
+        emit userRegistered(_userId, _userName, 0, msg.sender);
         }
 
-    //function to join the DAO
-    function joinDAO() public payable {
-        require(registered(msg.sender), "First signup to have an account");
-        string memory _userName = userAddress[msg.sender].userName;
-        uint _userId = userAddress[msg.sender].userId;
-        require(msg.value > 0, "Enter an amount");
-        (bool sent, ) = address(this).call{value: msg.value}("");
-        if (sent){
-            DAOMember storage newDAOMember = DaoMem[_userName];
-            newDAOMember.username = _userName;
-            newDAOMember.userId = _userId;
-            newDAOMember.memberAddress = msg.sender;
-
-            DAOs.push(newDAOMember);
-            totalDAOmem++;
-            emit succJoined(_userId, _userName, msg.sender);
+    //function to get username from address
+    function getUser(address _myAdd) public view returns(User memory , bool){
+        if (registered(_myAdd)) {
+            return (userAddress[_myAdd], true);
         } else {
-            return;
+            return (User(0, "", 0, address(0)), false);
         }
         
     }
+      
 
-    // //function to get user
-    // function getUser(string memory _userName) public view returns(User memory){
-    //     return ourUsers[_userName];
-    // }
+    // Function to join the DAO
+    function joinDAO() public payable {
+        require(registered(msg.sender), "First signup to have an account");
+        require(!member(msg.sender), "Already in the DAO");
+        require(msg.value > 0, "Enter an amount");
+        (bool sent, ) = address(this).call{value: msg.value}("");
+        require(sent, "Failed to send Ether");
 
+        string memory _userName = userAddress[msg.sender].userName;
+        bytes memory checkMark = "\xE2\x9C\x94";
+        uint _userId = totalDAOmem;
+        string memory _username = string(abi.encodePacked(_userName, checkMark));
+        DAOMember memory newDAOMember = DAOMember({
+            userId: _userId,
+            username: _username,
+            memberAddress: msg.sender
+        });
+        DAOmembers[_userId] = newDAOMember;
+        userAddress[msg.sender].userName = _username;
+        DAOs.push(newDAOMember);
+        totalDAOmem++;
+        emit succJoined(_userId, _userName, msg.sender);
+    }
+    
     //function to get total number of users
     function totalUsers() public view returns (uint) {
         return totalusers;
@@ -208,81 +237,79 @@ contract dAppify{
     function proposeDapp(Params memory params) public payable {
         require(msg.value == subscriptionPay, "Enter the correct price");
         (bool sent, ) = address(this).call{value: msg.value}("");
-        if (sent){
+        require(sent , "ether not sent");
             
-            uint _proposalId = totalProposals;
-            uint _endtime = block.timestamp + 24 hours;
-            Proposal storage newProposal = IdProposal[_proposalId ];
-            newProposal.proposalId = _proposalId;
-            newProposal.dAppName = params.dAppName;
-            newProposal.category = params.category;
-            newProposal.chain = params.chain;
-            newProposal.description = params.description;
-            newProposal.url = params.url;
-            newProposal.sourceCode = params.sourceCode;
-            newProposal.demolink = params.demolink;
-            newProposal.telegram = params.telegram;
-            newProposal.discord = params.discord;
-            newProposal.email = params.email;
-            newProposal.endtime = _endtime;
-            newProposal.proposer = msg.sender;
+        uint _proposalId = totalProposals;
+        uint _endtime = block.timestamp + 24 hours;
+        Proposal storage newProposal = IdProposal[_proposalId ];
+        newProposal.proposalId = _proposalId;
+        newProposal.dAppName = params.dAppName;
+        newProposal.ipfsHash = params.ipfsHash;
+        newProposal.category = params.category;
+        newProposal.chain = params.chain;
+        newProposal.description = params.description;
+        newProposal.url = params.url;
+        newProposal.sourceCode = params.sourceCode;
+        newProposal.demolink = params.demolink;
+        newProposal.telegram = params.telegram;
+        newProposal.discord = params.discord;
+        newProposal.email = params.email;
+        newProposal.endtime = _endtime;
+        newProposal.proposer = msg.sender;
 
-            totalProposals++;
-            
-            emit ProposalCreated(_proposalId, params.dAppName,
-            params.category,
-            params.chain,
-            params.description,
-            params.url,
-            params.sourceCode,
-            params.demolink,
-            params.telegram,
-            params.discord,
-            params.email,0,0,0,_endtime,msg.sender);
-        } else {
-            return;
-        }    
+        totalProposals++;
+        
+        emit ProposalCreated(_proposalId, params.dAppName, params.ipfsHash,
+        params.category,
+        params.chain,
+        params.description,
+        params.url,
+        params.sourceCode,
+        params.demolink,
+        params.telegram,
+        params.discord,
+        params.email,0,0,0,_endtime,msg.sender);
+        
     }
 
     //function to register dApp
     function registerDapp(Params memory params) public payable {
         require(msg.value == subscriptionPay, "Enter the correct price");
         (bool sent, ) = address(this).call{value: msg.value}("");
-        if (sent){
+        require(sent , "ether not sent");
             
-            uint _dAppId = totalRegisteredDapps;
-            dApp storage newdApp = dAppsMap[_dAppId];
-            newdApp.dAppId = _dAppId;
-            newdApp.dAppName = params.dAppName;
-            newdApp.category = params.category;
-            newdApp.chain = params.chain;
-            newdApp.description = params.description;
-            newdApp.url = params.url;
-            newdApp.sourceCode = params.sourceCode;
-            newdApp.demolink = params.demolink;
-            newdApp.dAppreg = msg.sender;
-            newdApp.telegram = params.telegram;
-            newdApp.discord = params.discord;
-            newdApp.email = params.email;
+        uint _dAppId = totalRegisteredDapps;
+        dApp storage newdApp = dAppsMap[_dAppId];
+        newdApp.dAppId = _dAppId;
+        newdApp.dAppName = params.dAppName;
+        newdApp.ipfsHash = params.ipfsHash;
+        newdApp.category = params.category;
+        newdApp.chain = params.chain;
+        newdApp.description = params.description;
+        newdApp.url = params.url;
+        newdApp.sourceCode = params.sourceCode;
+        newdApp.demolink = params.demolink;
+        newdApp.dAppreg = msg.sender;
+        newdApp.telegram = params.telegram;
+        newdApp.discord = params.discord;
+        newdApp.email = params.email;
 
-            totalRegisteredDapps++;
+        totalRegisteredDapps++;
 
-            dAppsList.push(newdApp);
-          
-            emit dAppRegistered(_dAppId, params.dAppName,
-            params.category,
-            params.chain,
-            params.description,
-            params.url,
-            params.sourceCode,
-            params.demolink,
-            msg.sender,
-            params.telegram,
-            params.discord,
-            params.email);
-        } else {
-            return;
-        }    
+        dAppsList.push(newdApp);
+        
+        emit dAppRegistered(_dAppId, params.dAppName, params.ipfsHash,
+        params.category,
+        params.chain,
+        params.description,
+        params.url,
+        params.sourceCode,
+        params.demolink,
+        msg.sender,
+        params.telegram,
+        params.discord,
+        params.email);
+            
     }
 
     //function to vote
@@ -314,6 +341,12 @@ contract dAppify{
         uint,
         uint,
         uint,
+        string memory,
+        string memory,
+        string memory,
+        string memory,
+        string memory,
+        string memory,
         address,
         bool
     ) {
@@ -327,6 +360,12 @@ contract dAppify{
             proposal.yesVotes,
             proposal.noVotes,
             proposal.endtime,
+            proposal.url,
+            proposal.sourceCode,
+            proposal.demolink,
+            proposal.telegram,
+            proposal.discord,
+            proposal.email,
             proposal.proposer,
             proposal.isApproved
         );
@@ -341,7 +380,6 @@ contract dAppify{
         return ids;
     }
 
-
     //function to get registered dApp
     function getdApp(uint _dAppId) public view returns (dApp memory) {
         return dAppsMap[_dAppId];
@@ -352,43 +390,33 @@ contract dAppify{
         return dAppsList;
     }
 
-    //function to check if username exist
+  // Function to check if a username exists
     function Exist(string memory _userName) public view returns (bool) {
-        for(uint i = 0; i < totalusers; i++) {
-        if(keccak256(bytes(users[i].userName)) == keccak256(bytes(_userName))){
-            return true;
-        }
+        return ourUsers[_userName].myAddress != address(0);
     }
-    return false;}
 
     //function to update downloads
-    function download() public {
-        require(registered(msg.sender), "Please signUp");
-        userAddress[msg.sender].Downloads++;     
+    function download(uint _dAppId) public {
+        require(registered(msg.sender), "Please signUp to get tokens");
+        require(DownloadsUint[_dAppId].myAddress != msg.sender, "Error message");
+        Downloads storage newDownload = DownloadsUint[_dAppId];
+        newDownload.dAppId = _dAppId;
+        newDownload.myAddress = msg.sender;
+        userAddress[msg.sender].Downloads++;
+        totalDownloads++;
+        DownloadsArray.push(newDownload);   
     }
 
-    //function to check if address is registered
+    // Function to check if an address is registered
     function registered(address _myAdd) public view returns (bool) {
-        for (uint i=0; i < totalusers; i++ ){
-            if(users[i].myAddress == _myAdd){
-                return true;
-            }
-        }
-    return false;}
-
-    //function to login
-    function login( string memory _userName,address _user) public view returns (bool) {
-        require(Exist(_userName),"username not found");
-        require(registered(_user),"Please sign up first");
-        require(ourUsers[_userName].myAddress == _user , "Please use the address you used to create");
-        return true;
+        return userAddress[_myAdd].myAddress != address(0);
     }
+
 
     //function to withdraw from the contract
     function withdraw() public payable onlyOwner {
-        uint amount = address(this).balance;
-        require(amount > 0, "No funds to withdraw");
-        (bool sent, ) = owner.call{value: amount}("");
+        require(address(this).balance > 0, "No funds to withdraw");
+        (bool sent, ) = owner.call{value: address(this).balance}("");
         require(sent , "Unable to withdraw");
     }
 
@@ -411,6 +439,7 @@ contract dAppify{
                 return true;
             }
         }
-    return false;}
+    return false;
+    }
 
 }

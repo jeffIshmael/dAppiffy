@@ -7,7 +7,7 @@ import { cookieToInitialState } from "wagmi";
 import { wagmiConfig } from "@/config";
 import Web3ModalProvider from "@/context";
 import { headers } from "next/headers";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import  React from "react";
 
