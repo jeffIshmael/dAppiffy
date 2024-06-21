@@ -15,9 +15,9 @@ export const RegisterdApp = () => {
   const { address, isConnected } = useAccount();
   const router = useRouter();
   const { writeContractAsync } = useWriteContract();
-  // const [file, setFile] = useState("");
+  const [file, setFile] = useState("");
   const [cid, setCid] = useState("");
-  // const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const inputFile = useRef(null);
 
   const validationSchema = Yup.object().shape({
@@ -79,7 +79,7 @@ export const RegisterdApp = () => {
     }
   }
 
-  const uploadFile = async (fileToUpload) => {
+  const uploadFile = async (fileToUpload : any) => {
     try {
       setUploading(true);
       const data = new FormData();
@@ -99,7 +99,10 @@ export const RegisterdApp = () => {
     }
   };
 
-  const handleChange = (e) => {
+  console.log(uploading);
+  console.log(file);
+
+  const handleChange = (e: any) => {
     setFile(e.target.files[0]);
     uploadFile(e.target.files[0]);
   };
