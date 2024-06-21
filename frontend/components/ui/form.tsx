@@ -1,4 +1,5 @@
 import * as React from "react"
+import PropTypes from "prop-types"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
 import {
@@ -83,6 +84,9 @@ const FormItem = React.forwardRef<
   )
 })
 FormItem.displayName = "FormItem"
+FormItem.propTypes = {
+  className: PropTypes.string,
+}
 
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
@@ -100,6 +104,9 @@ const FormLabel = React.forwardRef<
   )
 })
 FormLabel.displayName = "FormLabel"
+FormLabel.propTypes = {
+  className: PropTypes.string,
+}
 
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
@@ -139,6 +146,9 @@ const FormDescription = React.forwardRef<
   )
 })
 FormDescription.displayName = "FormDescription"
+FormDescription.propTypes = {
+  className: PropTypes.string,
+}
 
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
@@ -163,6 +173,9 @@ const FormMessage = React.forwardRef<
   )
 })
 FormMessage.displayName = "FormMessage"
+FormMessage.propTypes = {
+  className: PropTypes.string,
+}
 
 export {
   useFormField,

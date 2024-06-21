@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { DAPPIFYCONTRACT } from "../constants/constant";
 import dAppifyABI from "@/components/Blockchain/dAppifyABI.json";
 import { useReadContract } from "wagmi";
-import Link from "next/link";
+// import Link from "next/link";
 import Navbar from "../(components)/Nav";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
@@ -12,7 +12,7 @@ import Image from "next/image";
 
 const AllProposals = () => {
   const [countDown, setCountDown] = useState("");
-  const [time, setTime] = useState("");
+  // const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const {
     data: ProposalIds,
@@ -26,8 +26,7 @@ const AllProposals = () => {
 
   const {
     data: Proposals,
-    isPending: pending,
-    error: error2,
+    
   } = useReadContract({
     address: DAPPIFYCONTRACT,
     abi: dAppifyABI,
@@ -35,18 +34,18 @@ const AllProposals = () => {
     args: [ProposalIds],
   });
 
-  interface proposal {
-    proposalId: string;
-    dAppName: string;
-    description: string;
-    category: string;
-    chain: string;
-    yesVotes: string;
-    noVotes: string;
-    endtime: string;
-    proposer: string;
-    isApproved: boolean;
-  }
+  // interface proposal {
+  //   proposalId: string;
+  //   dAppName: string;
+  //   description: string;
+  //   category: string;
+  //   chain: string;
+  //   yesVotes: string;
+  //   noVotes: string;
+  //   endtime: string;
+  //   proposer: string;
+  //   isApproved: boolean;
+  // }
 
   useEffect(() => {
     if (!Proposals) return;
@@ -90,7 +89,7 @@ const AllProposals = () => {
     return () => clearInterval(intervalId);
   }, [Proposals]);
 
-  console.log(time);
+  
   console.log(countDown);
   console.log(Proposals);
   console.log(ProposalIds?.[0] as string);
