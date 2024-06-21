@@ -72,7 +72,7 @@ export const RegisterdApp = () => {
         toast("dApp has been registered successfully");
         router.push("/ExploreDapps");
       }
-    } catch (e) {
+    } catch (e : any) {
       console.log(e);
       toast.error("Failed to register dApp, try again.");
       return;
@@ -92,7 +92,7 @@ export const RegisterdApp = () => {
       setCid(resData.IpfsHash);
       console.log(resData.IpfsHash);
       setUploading(false);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       setUploading(false);
       alert("Trouble uploading file");

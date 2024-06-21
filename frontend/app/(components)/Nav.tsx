@@ -53,14 +53,14 @@ const Navbar: React.FC = () => {
   const { isConnected, address } = useAccount();
   const { disconnect } = useDisconnect();
   const [prob, setProb] = useState("");
-  // const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState("");
   const [mounted, setMounted] = useState(false);
-  // const [registered, setRegistered] = useState(false);
+  const [registered, setRegistered] = useState(false);
   const [userName, setUserName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isPending, writeContractAsync } = useWriteContract();
   const [isHovered, setIsHovered] = useState(false);
-  const { error,  refetch } = useReadContract({
+  const { error, refetch } = useReadContract({
     abi: dAppifyABI,
     address: DAPPIFYCONTRACT,
     functionName: "getUser",
@@ -95,7 +95,6 @@ const Navbar: React.FC = () => {
     },
   });
 
-
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
@@ -118,7 +117,6 @@ const Navbar: React.FC = () => {
           const result = await refetch();
           console.log(result);
           setUserName(result.data[0].userName);
-          
         } else {
           setProb("An error occurred while creating your account.");
         }
@@ -138,7 +136,8 @@ const Navbar: React.FC = () => {
       console.log("please connect wallet");
     }
   };
-
+  console.log(registered);
+  console.log(success);
 
   if (!mounted) return null;
 
@@ -193,7 +192,7 @@ const Navbar: React.FC = () => {
             variant="secondary"
             className="bg-gradient-to-r from-gray-600 to-gray-500 hover:bg-gradient-to-r hover:from-gray-400 hover:to-gray-300 text-gray-800 font-bold py-2 px-4 rounded flex-grow-1"
           >
-            <Link href="/Register-dApp">Register dApp</Link>
+            <Link href="/RegisterdApp">Register dApp</Link>
           </Button>
         </div>
         {auth.isAuthenticated ? (
