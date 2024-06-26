@@ -48,6 +48,10 @@ import { DAPPIFYCONTRACT } from "../constants/constant";
 import Modal from "./Modal";
 import { toast } from "sonner";
 
+type UserData = {
+  userName: string;
+};
+
 const Navbar: React.FC = () => {
   const auth = useAuth();
   const { isConnected, address } = useAccount();
@@ -77,15 +81,16 @@ const Navbar: React.FC = () => {
       console.log(address);
       try {
         const result = await refetch();
-        const reg = result.data[1];
-        console.log(result.data);
-        console.log(result.data[1]);
+        const data = result.data as [UserData, boolean];
+        const reg = data[1];
+        console.log(data);
+        console.log(data[1]);
         if (reg === false) {
           auth.isAuthenticated = false;
           setIsModalOpen(true);
         } else {
           auth.isAuthenticated = true;
-          setUserName(result.data[0].userName);
+          setUserName(data[0].userName);
           console.log(userName);
         }
       } catch (err) {
@@ -115,8 +120,9 @@ const Navbar: React.FC = () => {
           setProb("");
           auth.isAuthenticated = true;
           const result = await refetch();
+          const data = result.data as [UserData, boolean];
           console.log(result);
-          setUserName(result.data[0].userName);
+          setUserName(data[0].userName);
         } else {
           setProb("An error occurred while creating your account.");
         }
