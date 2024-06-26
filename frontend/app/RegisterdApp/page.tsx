@@ -11,7 +11,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import { ethers } from "ethers";
 
-export const RegisterdApp = () => {
+const RegisterdApp = () => {
   const { address, isConnected } = useAccount();
   const router = useRouter();
   const { writeContractAsync } = useWriteContract();

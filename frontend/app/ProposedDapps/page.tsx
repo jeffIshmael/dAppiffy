@@ -137,7 +137,7 @@ const AllProposals = () => {
                       {"   "} At: <span className="text-pretty">{date}</span>
                     </small>
 
-                    {countDown === "00hrs 00 mins" ? (
+                    {countDown === "0" ? (
                       <p className="text-red-300">Ended</p>
                     ) : (
                       <p style={{ fontStyle: "italic" }}>
