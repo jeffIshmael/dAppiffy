@@ -12,7 +12,7 @@ import Image from "next/image";
 
 const AllDapps = () => {
   const {
-    data: dApps,
+    data,
     isPending,
     error,
   } = useReadContract({
@@ -20,6 +20,8 @@ const AllDapps = () => {
     abi: dAppifyABI,
     functionName: "getAllDapps",
   });
+
+  const dApps = (data as DApp[]) || [];
 
   interface DApp {
     category: string;
