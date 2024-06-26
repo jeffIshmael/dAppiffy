@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 
-export const DAppifyDAO = () => {
+const DAppifyDAO = () => {
   const { error, writeContractAsync } = useWriteContract();
   const router = useRouter();
   const { isConnected } = useAccount();
