@@ -104,7 +104,7 @@ export default function LandPage() {
           </Button>
         </Link>
 
-        <Link href={"/dAppify-DAO"}>
+        <Link href={"/DAppifyDAO"}>
           <Button size="xl" variant="outlineSecondary">
             dAppify-DAO
           </Button>
